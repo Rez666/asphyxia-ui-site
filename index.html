@@ -65,7 +65,7 @@ a{color:var(--cyan)}
 
 /* Hero */
 .hero{padding-block:8px 24px}
-.hero-stage{position:relative;z-index:2;max-width:1640px;margin:0 auto;padding-top:28px;padding-left:var(--gutter-l);padding-right:var(--gutter-r);perspective:1700px}
+.hero-stage{position:relative;z-index:2;max-width:1400px;margin:0 auto;padding-top:28px;padding-left:var(--gutter-l);padding-right:var(--gutter-r);perspective:1700px}
 .screen{position:relative;max-width:100%;border:1px solid var(--line);background:var(--hull);overflow:hidden;
   box-shadow:0 0 0 1px #000,0 30px 80px -30px var(--pink),0 0 120px -40px var(--cyan)}
 .screen{transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transform-origin:50% 50%;will-change:transform;
@@ -101,6 +101,45 @@ a{color:var(--cyan)}
 .fx-scan{inset:0;opacity:.32;mix-blend-mode:multiply;background:repeating-linear-gradient(0deg,rgba(0,0,0,.5) 0 1px,transparent 1px 3px)}
 .fx-boot{left:0;right:0;top:104%;height:3%;background:linear-gradient(180deg,transparent,rgba(34,228,255,.9),rgba(255,255,255,.95),rgba(255,43,214,.8),transparent);box-shadow:0 0 30px 8px rgba(34,228,255,.45);mix-blend-mode:screen;animation:bootScan 1.4s cubic-bezier(.4,.1,.2,1) both}
 .screen.custom-art .fx-art{display:none}
+/* Cockpit window */
+.cockpit{position:absolute;inset:0;z-index:4;pointer-events:none}
+.cockpit .glass{position:absolute;inset:0;border-radius:3% / 7%;box-shadow:inset 0 0 0 2px rgba(34,228,255,.18),inset 0 0 70px 18px rgba(3,2,10,.85),inset 0 0 180px 40px rgba(3,2,10,.35);
+  background:linear-gradient(118deg,transparent 18%,rgba(255,255,255,.06) 24%,transparent 31%,transparent 70%,rgba(160,240,255,.05) 76%,transparent 82%)}
+.cockpit .strut{position:absolute;top:0;width:13%;height:30%;background:linear-gradient(180deg,#0b0916,#14102a 70%,rgba(20,16,42,.0));filter:drop-shadow(0 0 6px rgba(34,228,255,.35))}
+.cockpit .strut.l{left:0;clip-path:polygon(0 0,100% 0,8% 100%,0 100%)}
+.cockpit .strut.r{right:0;clip-path:polygon(0 0,100% 0,100% 100%,92% 100%)}
+.cockpit .strut::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 22px,rgba(34,228,255,.25) 22px 23px);mix-blend-mode:screen}
+.cockpit .console{position:absolute;left:0;right:0;bottom:0;height:5.5%;background:linear-gradient(180deg,rgba(14,11,30,0),rgba(14,11,30,.92) 55%);border-top:1px solid rgba(34,228,255,.25);
+  clip-path:polygon(0 35%,8% 0,92% 0,100% 35%,100% 100%,0 100%)}
+/* Flight HUD */
+.hud{position:absolute;inset:0;z-index:5;pointer-events:none;font:500 clamp(9px,.72vw,11px)/1.4 var(--f-mono);letter-spacing:.12em;color:var(--dim)}
+.hud b{color:var(--cyan);font-weight:600;font-variant-numeric:tabular-nums}
+.hud-warn{position:absolute;left:3.6%;top:9.5%;display:flex;align-items:center;gap:8px;padding:4px 10px;color:#ffd166;border:1px solid rgba(255,176,46,.6);background:rgba(40,16,0,.55);
+  text-shadow:0 0 8px rgba(255,176,46,.8);animation:warnFlash 1.1s steps(2) infinite}
+.hud-warn i{width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:10px solid #ffb02e}
+.hud-track{position:absolute;right:3.2%;top:8%;width:clamp(170px,17%,240px);padding:10px 12px;background:rgba(7,5,15,.62);border:1px solid rgba(34,228,255,.35);
+  box-shadow:0 0 22px -8px rgba(34,228,255,.7);backdrop-filter:blur(2px)}
+.hud-title{color:var(--ink);margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid rgba(34,228,255,.25)}
+.hud-track dl{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:0}
+.hud-track dt{color:var(--dim)}
+.hud-track dd{margin:0;text-align:right;color:var(--dim)}
+.hud-track dd.warn b{color:#ff5c7a}
+.hud-bar{height:4px;margin-top:8px;background:rgba(255,255,255,.08)}
+.hud-bar span{display:block;height:100%;width:20%;background:linear-gradient(90deg,#ffd166,#ff6a3d,#ff2b5c);transition:width .4s}
+.hud-ladder{position:absolute;right:3.2%;top:44%;height:30%;width:54px;border-left:1px solid rgba(34,228,255,.45);overflow:hidden;
+  -webkit-mask:linear-gradient(180deg,transparent,#000 18%,#000 82%,transparent);mask:linear-gradient(180deg,transparent,#000 18%,#000 82%,transparent)}
+.ladder-tape{position:absolute;left:0;right:0;top:0;will-change:transform}
+.ladder-tape span{display:flex;align-items:center;gap:6px;height:22px;color:var(--dim);font-size:10px}
+.ladder-tape span::before{content:"";width:8px;height:1px;background:rgba(34,228,255,.6)}
+.ladder-tape span.major::before{width:14px;background:var(--cyan)}
+.ladder-box{position:absolute;left:-1px;top:50%;transform:translateY(-50%);display:flex;align-items:baseline;gap:4px;padding:2px 6px;background:rgba(7,5,15,.85);border:1px solid var(--cyan)}
+.ladder-box small{font-size:8px;color:var(--dim)}
+.hud-heading{position:absolute;left:50%;bottom:1.2%;width:24%;height:20px;transform:translateX(-50%);overflow:hidden;border-bottom:1px solid rgba(34,228,255,.45);
+  -webkit-mask:linear-gradient(90deg,transparent,#000 20%,#000 80%,transparent);mask:linear-gradient(90deg,transparent,#000 20%,#000 80%,transparent)}
+.heading-tape{position:absolute;bottom:0;left:0;display:flex;will-change:transform}
+.heading-tape span{width:40px;flex:none;text-align:center;font-size:10px;color:var(--dim);border-left:1px solid rgba(34,228,255,.35);height:16px}
+.hud-heading i{position:absolute;left:50%;bottom:0;width:0;height:0;transform:translateX(-50%);border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:7px solid var(--pink)}
+@keyframes warnFlash{50%{opacity:.35}}
 .telemetry{position:absolute;left:44px;bottom:14px;z-index:5;display:flex;gap:16px;font:500 10px var(--f-mono);letter-spacing:.16em;color:var(--dim);
   background:rgba(7,5,15,.55);padding:4px 10px}
 .telemetry b{color:var(--cyan);font-weight:600}
@@ -125,7 +164,7 @@ a{color:var(--cyan)}
 .corner.tr{top:8px;right:8px;border-left:0;border-bottom:0;border-color:var(--pink)}
 .corner.bl{bottom:8px;left:8px;border-right:0;border-top:0;border-color:var(--pink)}
 .corner.br{bottom:8px;right:8px;border-left:0;border-top:0}
-.rec{position:absolute;top:14px;left:44px;z-index:3;font:500 11px var(--f-mono);letter-spacing:.16em;color:var(--ink);
+.rec{position:absolute;top:14px;left:44px;z-index:6;font:500 11px var(--f-mono);letter-spacing:.16em;color:var(--ink);
   background:rgba(7,5,15,.6);padding:3px 8px;display:flex;align-items:center;gap:6px}
 .rec i{width:7px;height:7px;border-radius:50%;background:var(--pink);box-shadow:0 0 8px var(--pink);animation:blink 1.2s steps(2) infinite}
 @keyframes drift{from{transform:scale(1.02) translate(0,0)}to{transform:scale(1.06) translate(-1.2%,-1%)}}
@@ -356,6 +395,8 @@ footer a{color:var(--dim)}
   .cmd span{grid-column:1/-1;grid-row:2}
   .rec{display:none}
   .telemetry{display:none}
+  .hud-track,.hud-ladder,.hud-heading,.cockpit .strut{display:none}
+  .hud-warn{top:auto;bottom:10%;left:4%}
   .fx-reticle b{display:none}
 }
 @media (prefers-reduced-motion:reduce){
@@ -396,12 +437,30 @@ footer a{color:var(--dim)}
         <div class="fx-art" aria-hidden="true">
           <span class="fx-eye e1"></span><span class="fx-eye e2"></span><span class="fx-flare"></span>
           <span class="fx-ring"></span>
-          <div class="fx-reticle"><i></i><i></i><i></i><i></i><b>LOCK · ASPHYXIA-UI</b></div>
+          <div class="fx-reticle"><i></i><i></i><i></i><i></i><b>TRACKING · OBJ ASP-37</b></div>
         </div>
         <span class="fx-shine" aria-hidden="true"></span>
         <canvas class="fx-embers" id="fx-embers" aria-hidden="true"></canvas>
         <span class="fx-scan" aria-hidden="true"></span>
         <span class="fx-boot" aria-hidden="true"></span>
+      </div>
+      <div class="cockpit" aria-hidden="true"><span class="strut l"></span><span class="strut r"></span><span class="glass"></span><span class="console"></span></div>
+      <div class="hud" aria-hidden="true">
+        <div class="hud-warn"><i></i>ATMOSPHERIC ENTRY</div>
+        <div class="hud-track">
+          <div class="hud-title">TRACK · METEOR <b>ASP-37</b></div>
+          <dl>
+            <dt>ALT</dt><dd><b id="hud-alt">118.0</b> km</dd>
+            <dt>VEL</dt><dd><b id="hud-vel">17.2</b> km/s</dd>
+            <dt>LAT</dt><dd><b id="hud-lat">47.6120</b>°N</dd>
+            <dt>LON</dt><dd><b id="hud-lon">122.3301</b>°W</dd>
+            <dt>HULL</dt><dd><b id="hud-temp">640</b> °C</dd>
+            <dt>IMPACT</dt><dd class="warn">T-<b id="hud-eta">00:58</b></dd>
+          </dl>
+          <div class="hud-bar"><span id="hud-heat"></span></div>
+        </div>
+        <div class="hud-ladder"><div class="ladder-tape" id="hud-ladder"></div><div class="ladder-box"><b id="hud-alt2">118</b><small>KM</small></div></div>
+        <div class="hud-heading"><div class="heading-tape" id="hud-heading"></div><i></i></div>
       </div>
       <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
       <div class="rec"><i></i>LIVE · WOW FOREVER</div>
@@ -895,6 +954,28 @@ SOFTWARE.</pre>
   size();addEventListener('resize',size);
   if('IntersectionObserver' in window){new IntersectionObserver(function(es){visible=es[0].isIntersecting;if(visible)go()}).observe(screen)}
   go();
+  (function flight(){
+    function $(i){return document.getElementById(i)}
+    var alt=$('hud-alt'),alt2=$('hud-alt2'),vel=$('hud-vel'),lat=$('hud-lat'),lon=$('hud-lon'),temp=$('hud-temp'),eta=$('hud-eta'),heat=$('hud-heat'),lad=$('hud-ladder'),hd=$('hud-heading');
+    if(!alt)return;
+    var i,html='';for(i=140;i>=0;i-=5)html+='<span class="'+(i%20===0?'major':'')+'">'+(i%20===0?i:'')+'</span>';lad.innerHTML=html;
+    html='';for(i=0;i<2;i++)for(var d=0;d<360;d+=15)html+='<span>'+(d%45===0?['N','NE','E','SE','S','SW','W','NW'][d/45]:d)+'</span>';hd.innerHTML=html;
+    var T=60,t0=performance.now(),la=47.6120,lo=122.3301;
+    function step(now){
+      var s=((now-t0)/1000)%T,k=s/T;                    // 0..1 through one entry
+      var a=118-k*(118-12)*(0.6+0.4*k);                 // km, accelerating fall
+      var v=17.2+k*6.1, h=640+Math.pow(k,1.6)*2350;      // km/s, deg C
+      la=47.6120-k*1.9; lo=122.3301-k*3.4;
+      alt.textContent=a.toFixed(1);alt2.textContent=Math.round(a);vel.textContent=v.toFixed(1);
+      lat.textContent=la.toFixed(4);lon.textContent=lo.toFixed(4);temp.textContent=Math.round(h).toLocaleString('en-US');
+      var r=Math.max(0,Math.round(T-s)),mm=String(Math.floor(r/60)).padStart(2,'0'),ss=String(r%60).padStart(2,'0');eta.textContent=mm+':'+ss;
+      heat.style.width=(15+k*85).toFixed(1)+'%';
+      lad.style.transform='translateY('+(-(140-a)/5*22+ (lad.parentNode.clientHeight/2-11)).toFixed(1)+'px)';
+      var hdg=(212+Math.sin(now/5200)*14+k*20)%360;hd.style.transform='translateX('+(-(hdg/15)*40+hd.parentNode.clientWidth/2-20).toFixed(1)+'px)';
+      if(visible)requestAnimationFrame(step);else setTimeout(function(){requestAnimationFrame(step)},500);
+    }
+    requestAnimationFrame(step);
+  })();
   var sig=document.getElementById('fx-signal');setInterval(function(){if(visible&&sig)sig.textContent=94+Math.floor(Math.random()*6)},1600);
   var ver=document.getElementById('cfg-version'),b=document.getElementById('fx-build');setTimeout(function(){if(ver&&b&&ver.textContent.trim())b.textContent=ver.textContent.trim().toUpperCase()},1500);
 })();
