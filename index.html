@@ -117,8 +117,9 @@ a{color:var(--cyan)}
 .hud-warn{position:absolute;left:3.6%;top:9.5%;display:flex;align-items:center;gap:8px;padding:4px 10px;color:#ffd166;border:1px solid rgba(255,176,46,.6);background:rgba(40,16,0,.55);
   text-shadow:0 0 8px rgba(255,176,46,.8);animation:warnFlash 1.1s steps(2) infinite}
 .hud-warn i{width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:10px solid #ffb02e}
-.hud-track{position:absolute;right:3.2%;top:8%;width:clamp(170px,17%,240px);padding:10px 12px;background:rgba(7,5,15,.62);border:1px solid rgba(34,228,255,.35);
-  box-shadow:0 0 22px -8px rgba(34,228,255,.7);backdrop-filter:blur(2px)}
+.hud-track{position:absolute;right:3.2%;top:8%;width:clamp(170px,17%,240px);padding:10px 12px;background:linear-gradient(160deg,rgba(7,5,15,.30),rgba(7,5,15,.14));border:1px solid rgba(34,228,255,.26);
+  box-shadow:0 0 18px -10px rgba(34,228,255,.6);text-shadow:0 1px 2px rgba(0,0,0,.95),0 0 8px rgba(0,0,0,.8)}
+.hud-track dt,.hud-track dd{color:#c9c3ea}
 .hud-title{color:var(--ink);margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid rgba(34,228,255,.25)}
 .hud-track dl{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:0}
 .hud-track dt{color:var(--dim)}
@@ -842,6 +843,53 @@ SOFTWARE.</pre>
     stars=[];var n=Math.round(W*H/5200);for(var i=0;i<n;i++)stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.3+.2,t:Math.random()*6.28,s:.01+Math.random()*.03,h:Math.random()<.5?'34,228,255':(Math.random()<.5?'255,43,214':'236,233,255')});}
   function spawn(){var sp=6+Math.random()*7;meteors.push({x:W*(.3+Math.random()*.9),y:-40,vx:-sp*.72,vy:sp*.7,len:90+Math.random()*140,life:1,w:1+Math.random()*2.2});}
   function accent(){return getComputedStyle(root).getPropertyValue('--cyan').trim()||'#22e4ff';}
+  /* Constellations: real star patterns form, link, name themselves and fade. */
+  var CONSTELLATIONS=[
+    {n:'URSA MAJOR',p:[[0,.35],[.18,.3],[.33,.36],[.47,.45],[.5,.72],[.78,.78],[.8,.5]],l:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,3]]},
+    {n:'ORION',p:[[.2,.1],[.75,.18],[.38,.5],[.5,.48],[.62,.46],[.3,.92],[.8,.86],[.48,.02]],l:[[7,0],[7,1],[0,2],[1,4],[2,3],[3,4],[2,5],[4,6]]},
+    {n:'CASSIOPEIA',p:[[0,.3],[.25,.72],[.5,.45],[.75,.78],[1,.28]],l:[[0,1],[1,2],[2,3],[3,4]]},
+    {n:'CYGNUS',p:[[.5,0],[.5,.4],[.5,1],[.08,.28],[.92,.52],[.3,.34],[.72,.46]],l:[[0,1],[1,2],[3,5],[5,1],[1,6],[6,4]]},
+    {n:'LYRA',p:[[.2,0],[.4,.32],[.66,.36],[.72,.84],[.46,.78]],l:[[0,1],[1,2],[2,3],[3,4],[4,1]]},
+    {n:'LEO',p:[[.3,.72],[.32,.46],[.24,.26],[.34,.06],[.5,.12],[.96,.62],[.7,.44],[.7,.72]],l:[[0,1],[1,2],[2,3],[3,4],[1,6],[6,5],[5,7],[7,0]]},
+    {n:'SCORPIUS',p:[[.05,.08],[.1,.25],[.08,.4],[.2,.46],[.3,.52],[.4,.62],[.5,.76],[.62,.86],[.76,.92],[.88,.84],[.93,.7],[.86,.6]],l:[[0,1],[1,2],[1,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11]]},
+    {n:'CRUX',p:[[.5,0],[.5,1],[.1,.45],[.86,.56],[.68,.72]],l:[[0,1],[2,3]]},
+    {n:'PEGASUS',p:[[.1,.12],[.56,.1],[.58,.56],[.12,.56],[.84,.74],[1,.96],[0,.86]],l:[[0,1],[1,2],[2,3],[3,0],[2,4],[4,5],[3,6]]}
+  ];
+  var skies=[],nextSky=0,lastName='';
+  function newSky(now){
+    var pick;do{pick=CONSTELLATIONS[Math.floor(Math.random()*CONSTELLATIONS.length)]}while(pick.n===lastName);lastName=pick.n;
+    var size=(W<700?110:170)+Math.random()*(W<700?60:120),pad=size*.7,tries=0,cx,cy,ok;
+    do{cx=pad+Math.random()*Math.max(1,W-2*pad);cy=pad+Math.random()*Math.max(1,H-2*pad);ok=true;
+      for(var k=0;k<skies.length;k++)if(Math.hypot(skies[k].cx-cx,skies[k].cy-cy)<size*1.6)ok=false;tries++}while(!ok&&tries<12);
+    var rot=(Math.random()-.5)*1.1,c=Math.cos(rot),s=Math.sin(rot);
+    var pts=pick.p.map(function(q){var dx=q[0]-.5,dy=q[1]-.5;return [cx+(dx*c-dy*s)*size,cy+(dx*s+dy*c)*size]});
+    var drawMs=1100+pick.l.length*330;
+    skies.push({name:pick.n,pts:pts,lines:pick.l,cx:cx,cy:cy,t0:now,drawMs:drawMs,total:drawMs+4800+1700,maxY:Math.max.apply(null,pts.map(function(q){return q[1]}))});
+  }
+  function drawSkies(now){
+    if(now>nextSky&&skies.length<(W<700?1:2)){newSky(now);nextSky=now+3600+Math.random()*2600}
+    for(var i=skies.length-1;i>=0;i--){var k=skies[i],e=now-k.t0;
+      if(e>k.total){skies.splice(i,1);continue}
+      var out=e>k.total-1700?1-(e-(k.total-1700))/1700:1;
+      // lines draw one after another
+      x.lineWidth=1;x.lineCap='round';
+      for(var j=0;j<k.lines.length;j++){var p0=(e-1100-j*330)/330;if(p0<=0)break;p0=Math.min(1,p0);
+        var a=k.pts[k.lines[j][0]],b=k.pts[k.lines[j][1]];
+        x.strokeStyle='rgba(34,228,255,'+(.42*out).toFixed(3)+')';x.beginPath();x.moveTo(a[0],a[1]);x.lineTo(a[0]+(b[0]-a[0])*p0,a[1]+(b[1]-a[1])*p0);x.stroke();}
+      // stars switch on in sequence
+      for(var m=0;m<k.pts.length;m++){var f=Math.min(1,Math.max(0,(e-m*110)/500))*out;if(f<=0)continue;
+        var q=k.pts[m],tw=.75+.25*Math.sin(now/260+m);
+        var gr=x.createRadialGradient(q[0],q[1],0,q[0],q[1],9);gr.addColorStop(0,'rgba(220,250,255,'+(.95*f*tw).toFixed(3)+')');gr.addColorStop(.25,'rgba(34,228,255,'+(.45*f).toFixed(3)+')');gr.addColorStop(1,'rgba(34,228,255,0)');
+        x.fillStyle=gr;x.beginPath();x.arc(q[0],q[1],9,0,6.283);x.fill();
+        x.fillStyle='rgba(255,255,255,'+(f*tw).toFixed(3)+')';x.beginPath();x.arc(q[0],q[1],1.6,0,6.283);x.fill();}
+      // name once the figure is complete
+      var lf=Math.min(1,Math.max(0,(e-k.drawMs)/700))*out;
+      if(lf>0){x.font='600 11px "JetBrains Mono", Consolas, monospace';if('letterSpacing' in x)x.letterSpacing='3px';x.textAlign='center';
+        x.fillStyle='rgba(255,43,214,'+(.75*lf).toFixed(3)+')';x.fillText(k.name,k.cx,k.maxY+24);
+        x.fillStyle='rgba(163,156,200,'+(.55*lf).toFixed(3)+')';x.font='400 9px "JetBrains Mono", Consolas, monospace';x.fillText('CONSTELLATION · '+k.pts.length+' STARS',k.cx,k.maxY+38);
+        if('letterSpacing' in x)x.letterSpacing='0px';x.textAlign='start';}
+    }
+  }
   var nebulaA=0;
   function frame(){
     x.clearRect(0,0,W,H);
@@ -849,6 +897,7 @@ SOFTWARE.</pre>
     var g=x.createRadialGradient(W*.15+Math.sin(nebulaA)*60,H*.3,0,W*.15,H*.3,W*.6);g.addColorStop(0,'rgba(255,43,214,.16)');g.addColorStop(1,'rgba(255,43,214,0)');x.fillStyle=g;x.fillRect(0,0,W,H);
     var g2=x.createRadialGradient(W*.9,H*.75+Math.cos(nebulaA)*50,0,W*.9,H*.75,W*.55);g2.addColorStop(0,'rgba(34,228,255,.13)');g2.addColorStop(1,'rgba(34,228,255,0)');x.fillStyle=g2;x.fillRect(0,0,W,H);
     for(var i=0;i<stars.length;i++){var s=stars[i];s.t+=s.s;x.fillStyle='rgba('+s.h+','+(.35+.45*Math.sin(s.t))+')';x.beginPath();x.arc(s.x,s.y,s.r,0,6.28);x.fill();}
+    if(!reduce)drawSkies(performance.now());
     if(!reduce&&Math.random()<.025&&meteors.length<5)spawn();
     for(var j=meteors.length-1;j>=0;j--){var m=meteors[j];m.x+=m.vx;m.y+=m.vy;
       var tx=m.x-m.vx/Math.hypot(m.vx,m.vy)*m.len,ty=m.y-m.vy/Math.hypot(m.vx,m.vy)*m.len;
