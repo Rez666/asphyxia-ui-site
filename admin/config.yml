@@ -1,0 +1,71 @@
+# Settings page for asphyxia-ui.com (Sveltia CMS).
+# Sign in at /admin with "Sign In with Token" and a GitHub personal access token.
+backend:
+  name: github
+  repo: Rez666/asphyxia-ui-site
+  branch: main
+  commit_messages:
+    update: "Update site settings"
+    uploadMedia: "Upload {{path}}"
+
+media_folder: img/uploads
+public_folder: img/uploads
+site_url: https://asphyxia-ui.com
+display_url: https://asphyxia-ui.com
+
+collections:
+  - name: settings
+    label: Website
+    editor: { preview: false }
+    files:
+      - name: site
+        label: Website settings
+        file: site.json
+        format: json
+        fields:
+          - name: branding
+            label: Logo & banner
+            widget: object
+            fields:
+              - { name: siteTitle, label: "Browser tab title", widget: string }
+              - { name: logoText, label: "Logo text", widget: string }
+              - { name: logoAccent, label: "Logo accent text (gradient part)", widget: string, required: false }
+              - { name: logo, label: "Logo image (optional, shows left of the logo text)", widget: image, required: false }
+              - { name: banner, label: "Hero banner image", widget: image, required: false }
+          - name: colors
+            label: Colours
+            widget: object
+            fields:
+              - { name: accentA, label: "Main accent (cyan)", widget: color }
+              - { name: accentB, label: "Second accent (pink)", widget: color }
+              - { name: background, label: "Page background", widget: color }
+          - name: hero
+            label: Headline & status
+            widget: object
+            fields:
+              - { name: headline, label: "Headline, first line", widget: string }
+              - { name: glitchLine, label: "Headline, glitching second line", widget: string }
+              - { name: intro, label: "Intro paragraph", widget: text }
+              - { name: version, label: "Build number", widget: string }
+              - { name: status, label: "Status", widget: string }
+          - name: download
+            label: Download
+            widget: object
+            fields:
+              - { name: url, label: "Download link (must start with https://)", widget: string, pattern: ['^https://', 'Must start with https://'] }
+          - name: support
+            label: Support section
+            widget: object
+            fields:
+              - { name: title, label: "Heading", widget: string }
+              - { name: text, label: "Text", widget: text }
+          - name: links
+            label: Social & donation links
+            hint: "Leave a link blank to hide its button. Links must start with https://"
+            widget: object
+            fields:
+              - { name: discord, label: "Discord invite", widget: string, required: false, pattern: ['^(https://.*)?$', 'Must start with https://'] }
+              - { name: youtube, label: "YouTube channel", widget: string, required: false, pattern: ['^(https://.*)?$', 'Must start with https://'] }
+              - { name: patreon, label: "Patreon page", widget: string, required: false, pattern: ['^(https://.*)?$', 'Must start with https://'] }
+              - { name: paypal, label: "PayPal donation link", widget: string, required: false, pattern: ['^(https://.*)?$', 'Must start with https://'] }
+              - { name: github, label: "GitHub page", widget: string, required: false, pattern: ['^(https://.*)?$', 'Must start with https://'] }

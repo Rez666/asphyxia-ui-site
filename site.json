@@ -1,0 +1,35 @@
+{
+  "branding": {
+    "siteTitle": "Asphyxia-UI",
+    "logoText": "ASPHYXIA",
+    "logoAccent": "//UI",
+    "logo": "",
+    "banner": "img/banner.webp"
+  },
+  "colors": {
+    "accentA": "#22e4ff",
+    "accentB": "#ff2bd6",
+    "background": "#07050f"
+  },
+  "hero": {
+    "headline": "One interface.",
+    "glitchLine": "Built to haunt Azeroth.",
+    "intro": "Asphyxia-UI replaces your unit frames, bars, bags, chat, map and Blizzard windows with one dark, neon-lit design: gunmetal panels, cyan-to-pink accents and skull artwork, made only for WoW Forever.",
+    "version": "26.1.136-alpha",
+    "status": "Active development"
+  },
+  "download": {
+    "url": "https://github.com/Rez666/asphyxia-ui-site/releases/download/asphyxia-latest/Asphyxia-UI.zip"
+  },
+  "support": {
+    "title": "Keep the skull burning",
+    "text": "Asphyxia-UI is free. Join the community, watch the build videos, or chip in to keep development going."
+  },
+  "links": {
+    "discord": "https://discord.gg/bArzBu54j",
+    "youtube": "https://www.youtube.com/@AsphyxiaUI-WoW",
+    "patreon": "",
+    "paypal": "https://www.paypal.com/donate/?hosted_button_id=LYCRUM9PD4B7J",
+    "github": "https://github.com/Rez666"
+  }
+}

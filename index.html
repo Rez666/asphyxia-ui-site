@@ -1,0 +1,793 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Asphyxia-UI: a dark, neon-lit custom interface for WoW Forever. Unit frames, action bars, inventory, damage meter and skinned Blizzard windows.">
+<meta property="og:title" content="Asphyxia-UI">
+<meta property="og:description" content="A dark, neon-lit custom interface built for WoW Forever.">
+<meta property="og:image" content="img/banner.webp">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Asphyxia-UI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,700;1,700&family=Saira:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a cockpit HUD over a live meteor field. The banner is the hero; every section sits in a bracketed HUD panel. Single dark world by design. */
+:root{
+  color-scheme:dark;
+  --void:#07050f;        /* deep space ground */
+  --hull:#100c1f;        /* panel fill */
+  --hull-2:#171230;
+  --line:#2a2350;        /* hairlines */
+  --ink:#ece9ff;         /* primary text */
+  --dim:#a39cc8;         /* secondary text */
+  --cyan:#22e4ff;        /* accent A: skull eyes */
+  --pink:#ff2bd6;        /* accent B: nebula */
+  --flare:#ffb02e;       /* meteor fire, used sparingly */
+  --f-display:"Chakra Petch","Segoe UI",system-ui,sans-serif;
+  --f-body:"Saira","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --gutter-l:max(16px,env(safe-area-inset-left,0px));
+  --gutter-r:max(16px,env(safe-area-inset-right,0px));
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--void)}
+a{color:var(--cyan)}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.07;
+  background:repeating-linear-gradient(0deg,#fff 0 1px,transparent 1px 3px)}
+.wrap{position:relative;z-index:2;max-width:1180px;margin:0 auto;padding-left:var(--gutter-l);padding-right:var(--gutter-r)}
+
+/* Nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;backdrop-filter:blur(10px);
+  background:color-mix(in srgb,var(--void) 78%,transparent);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:18px;padding-block:10px;flex-wrap:wrap;max-width:1480px}
+@media (max-width:1460px){.nav ul{display:none}.nav-social{margin-left:auto}}
+.brand{font-family:var(--f-display);font-weight:700;font-style:italic;font-size:20px;letter-spacing:.04em;text-decoration:none;color:var(--ink)}
+.brand b{background:linear-gradient(90deg,var(--pink),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.nav ul{display:flex;gap:18px;list-style:none;margin:0 0 0 auto;padding:0;flex-wrap:wrap}
+.nav ul a{color:var(--dim);text-decoration:none;font-family:var(--f-display);font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+.nav ul a:hover{color:var(--cyan)}
+
+/* Buttons */
+.btn{--c:var(--cyan);position:relative;display:inline-flex;align-items:center;gap:10px;padding:14px 26px;
+  font-family:var(--f-display);font-weight:700;font-size:15px;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;
+  color:var(--void);background:linear-gradient(90deg,var(--pink),var(--cyan));border:0;cursor:pointer;
+  clip-path:polygon(14px 0,100% 0,calc(100% - 14px) 100%,0 100%);transition:filter .2s,transform .2s}
+.btn:hover{filter:brightness(1.15) drop-shadow(0 0 14px var(--cyan));transform:translateY(-2px)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.btn.ghost:hover{color:var(--cyan)}
+.nav .btn{padding:9px 18px;font-size:12px}
+
+/* Hero */
+.hero{padding-block:40px 24px}
+.screen{position:relative;max-width:100%;border:1px solid var(--line);background:var(--hull);overflow:hidden;
+  box-shadow:0 0 0 1px #000,0 30px 80px -30px var(--pink),0 0 120px -40px var(--cyan)}
+.screen img{display:block;width:100%;height:auto;animation:drift 14s ease-in-out infinite alternate}
+.screen::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,transparent 0%,rgba(34,228,255,.18) 48%,rgba(255,255,255,.35) 50%,rgba(255,43,214,.18) 52%,transparent 100%);
+  background-size:100% 260%;mix-blend-mode:screen;animation:sweep 5.5s linear infinite}
+.corner{position:absolute;width:26px;height:26px;border:2px solid var(--cyan);z-index:3;pointer-events:none}
+.corner.tl{top:8px;left:8px;border-right:0;border-bottom:0}
+.corner.tr{top:8px;right:8px;border-left:0;border-bottom:0;border-color:var(--pink)}
+.corner.bl{bottom:8px;left:8px;border-right:0;border-top:0;border-color:var(--pink)}
+.corner.br{bottom:8px;right:8px;border-left:0;border-top:0}
+.rec{position:absolute;top:14px;left:44px;z-index:3;font:500 11px var(--f-mono);letter-spacing:.16em;color:var(--ink);
+  background:rgba(7,5,15,.6);padding:3px 8px;display:flex;align-items:center;gap:6px}
+.rec i{width:7px;height:7px;border-radius:50%;background:var(--pink);box-shadow:0 0 8px var(--pink);animation:blink 1.2s steps(2) infinite}
+@keyframes drift{from{transform:scale(1.02) translate(0,0)}to{transform:scale(1.06) translate(-1.2%,-1%)}}
+@keyframes sweep{from{background-position:0 160%}to{background-position:0 -160%}}
+@keyframes blink{50%{opacity:0}}
+
+.pitch{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:32px;align-items:end;margin-top:36px}
+.boot{font:400 13px var(--f-mono);color:var(--cyan);letter-spacing:.06em;min-height:1.6em}
+.boot::after{content:"▌";animation:blink 1s steps(2) infinite;margin-left:2px}
+h1{font-family:var(--f-display);font-weight:700;font-style:italic;font-size:clamp(34px,5.6vw,64px);line-height:1.02;
+  margin:10px 0 16px;text-wrap:balance;letter-spacing:-.01em}
+h1 .glitch{position:relative;display:inline-block;color:var(--ink)}
+h1 .glitch::before,h1 .glitch::after{content:attr(data-text);position:absolute;inset:0;pointer-events:none}
+h1 .glitch::before{color:var(--pink);animation:g1 4s infinite steps(1)}
+h1 .glitch::after{color:var(--cyan);animation:g2 4s infinite steps(1)}
+@keyframes g1{0%,92%,100%{transform:none;clip-path:inset(0 0 100% 0)}93%{transform:translate(-3px,1px);clip-path:inset(10% 0 55% 0)}96%{transform:translate(2px,-1px);clip-path:inset(60% 0 8% 0)}}
+@keyframes g2{0%,92%,100%{transform:none;clip-path:inset(0 0 100% 0)}94%{transform:translate(3px,-1px);clip-path:inset(40% 0 30% 0)}97%{transform:translate(-2px,1px);clip-path:inset(5% 0 75% 0)}}
+.lede{color:var(--dim);font-size:18px;max-width:56ch;margin:0 0 26px}
+.ctas{display:flex;gap:14px;flex-wrap:wrap}
+.readout{border:1px solid var(--line);background:linear-gradient(180deg,var(--hull-2),var(--hull));padding:18px 20px;font:400 13px var(--f-mono)}
+.readout h2{font:600 11px var(--f-display);letter-spacing:.24em;text-transform:uppercase;color:var(--dim);margin:0 0 12px}
+.readout dl{display:grid;grid-template-columns:auto 1fr;gap:8px 18px;margin:0}
+.readout dt{color:var(--dim)}
+.readout dd{margin:0;text-align:right;font-variant-numeric:tabular-nums}
+.ok{color:var(--cyan)}.warn{color:var(--flare)}
+.bar{grid-column:1/-1;height:6px;background:#000;border:1px solid var(--line);overflow:hidden;margin-top:4px}
+.bar span{display:block;height:100%;width:72%;background:repeating-linear-gradient(115deg,var(--pink) 0 10px,var(--cyan) 10px 20px);background-size:200% 100%;animation:stripe 2s linear infinite}
+@keyframes stripe{to{background-position:-56px 0}}
+
+/* Ticker */
+.ticker{position:relative;z-index:2;border-block:1px solid var(--line);background:rgba(16,12,31,.7);overflow:hidden;margin-top:56px}
+.ticker div{display:flex;gap:48px;width:max-content;padding-block:12px;animation:tick 40s linear infinite;
+  font:600 13px var(--f-display);letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+.ticker span::before{content:"◆";color:var(--pink);margin-right:48px}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* Sections */
+section{padding-block:88px 0}
+.eyebrow{font:500 12px var(--f-mono);color:var(--pink);letter-spacing:.2em;text-transform:uppercase}
+h2.title{font-family:var(--f-display);font-weight:700;font-size:clamp(28px,3.8vw,44px);line-height:1.08;margin:8px 0 14px;text-wrap:balance}
+.sub{color:var(--dim);max-width:62ch;margin:0 0 36px}
+
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.sys{position:relative;padding:24px 22px 22px;background:linear-gradient(160deg,var(--hull-2),var(--hull) 60%);
+  clip-path:polygon(0 0,calc(100% - 22px) 0,100% 22px,100% 100%,22px 100%,0 calc(100% - 22px));isolation:isolate;min-width:0}
+.sys::before{content:"";position:absolute;inset:0;z-index:-1;padding:1px;
+  background:conic-gradient(from var(--a,0deg),var(--line),var(--line) 70%,var(--cyan) 80%,var(--pink) 90%,var(--line));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;
+  clip-path:inherit;opacity:.6;transition:opacity .3s}
+.sys:hover::before{opacity:1;animation:spin 2.4s linear infinite}
+@property --a{syntax:"<angle>";inherits:false;initial-value:0deg}
+@keyframes spin{to{--a:360deg}}
+.sys .tag{font:500 11px var(--f-mono);color:var(--cyan);letter-spacing:.16em}
+.sys h3{font:700 21px var(--f-display);margin:6px 0 8px}
+.sys p{color:var(--dim);margin:0;font-size:15px}
+.sys code{font:500 13px var(--f-mono);color:var(--ink);background:#000;padding:1px 6px}
+
+/* Morph */
+.morph{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:36px;align-items:center}
+.frame{position:relative;border:1px solid var(--line);background:#000;overflow:hidden;transform:perspective(1200px) rotateY(-6deg) rotateX(2deg);
+  transition:transform .5s;box-shadow:0 30px 60px -30px var(--cyan)}
+.frame:hover{transform:none}
+.frame img{display:block;width:100%;height:auto}
+.frame figcaption{position:absolute;left:0;right:0;bottom:0;padding:8px 12px;font:400 12px var(--f-mono);color:var(--dim);
+  background:linear-gradient(0deg,rgba(0,0,0,.85),transparent)}
+ul.ticks{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+ul.ticks li{display:grid;grid-template-columns:18px 1fr;gap:10px;color:var(--dim)}
+ul.ticks li::before{content:"";width:10px;height:10px;margin-top:8px;background:var(--cyan);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);box-shadow:0 0 8px var(--cyan)}
+ul.ticks b{color:var(--ink);font-weight:600}
+
+/* Frame styles */
+.styles{display:grid;gap:22px}
+.style{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:28px;align-items:center;padding:18px;border:1px solid var(--line);background:var(--hull)}
+.stage{background:#0d0e24;border:1px solid var(--line);padding:clamp(6px,1.5vw,14px);display:grid;place-items:center;min-width:0;overflow:hidden}
+.stage img{display:block;width:100%;height:auto;max-width:100%;transition:transform .4s}
+.style:hover .stage img{transform:scale(1.03)}
+.style .tag{font:500 11px var(--f-mono);color:var(--cyan);letter-spacing:.16em}
+.style h3{font:700 24px var(--f-display);margin:6px 0 12px}
+.style:nth-child(2) .tag{color:var(--pink)}
+.style:nth-child(3) .tag{color:var(--flare)}
+.style:nth-child(4) .tag{color:#b48cff}
+
+/* Support links */
+.brand img{height:28px;width:auto;vertical-align:middle;margin-right:8px}
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.link-card{--c:var(--cyan);display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 12px;align-items:center;padding:18px;text-decoration:none;color:var(--ink);
+  border:1px solid var(--line);background:linear-gradient(160deg,var(--hull-2),var(--hull));transition:border-color .25s,transform .25s,box-shadow .25s;min-width:0}
+.link-card svg{width:36px;height:36px;color:var(--brand)}
+.link-card b{display:block;font:700 18px var(--f-display)}
+.link-card small{display:block;color:var(--dim);font-size:13px}
+.link-card em{grid-column:1/-1;font:600 11px var(--f-display);font-style:normal;letter-spacing:.18em;text-transform:uppercase;color:var(--c);margin-top:6px}
+.link-card:hover{border-color:var(--c);transform:translateY(-3px);box-shadow:0 14px 30px -18px var(--c)}
+.link-card.discord{--c:#8c9eff}.link-card.youtube{--c:#ff4d4d}.link-card.patreon{--c:#ff7a59}.link-card.paypal{--c:#4fb3ff}.link-card.github{--c:#e6e1ff}
+.foot-links{display:flex;gap:16px;flex-wrap:wrap}
+.nav-social{display:flex;gap:4px;align-items:flex-start}
+.nav-social a{--c:var(--brand);display:flex;flex-direction:column;align-items:center;gap:5px;width:86px;text-decoration:none;color:var(--dim);transition:color .2s,transform .2s}
+.nav-social i{display:grid;place-items:center;width:46px;height:46px;border:1px solid var(--line);background:rgba(16,12,31,.75);color:var(--brand);transition:border-color .2s,box-shadow .2s}
+.nav-social svg{width:28px;height:28px}
+.nav-social span{font:600 10px/1.2 var(--f-display);letter-spacing:.06em;text-transform:uppercase;text-align:center}
+.nav-social a:hover,.nav-social a:focus-visible{color:var(--c);transform:translateY(-1px)}
+.nav-social a:hover i,.nav-social a:focus-visible i{border-color:var(--c);box-shadow:0 0 14px -4px var(--c)}
+.discord{--brand:#5865F2}.youtube{--brand:#FF0000}.patreon{--brand:#FF424D}.paypal{--brand:#009CDE}.github{--brand:#FFFFFF}
+
+/* Special thanks */
+.thanks{margin-top:64px;padding-block:28px 6px;border-top:1px solid var(--line);text-align:center}
+.thanks-list{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 12px}
+.thanks-list li{font:700 16px var(--f-display);letter-spacing:.04em;padding:7px 14px;border:1px solid var(--line);background:var(--hull)}
+.thanks-list span{background:linear-gradient(90deg,var(--pink),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.thanks + footer{margin-top:24px}
+
+/* License & credits */
+.legal-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-bottom:18px}
+.legal-card{border:1px solid var(--line);background:var(--hull);padding:20px 22px;min-width:0}
+.legal-card h3{font:700 20px var(--f-display);margin:0 0 10px}
+.legal-card p{color:var(--dim);margin:0 0 12px}
+.legal-card p b{color:var(--ink)}
+.legal-list{margin:0;padding-left:18px;display:grid;gap:8px;color:var(--dim);font-size:15px}
+.legal-list b{color:var(--ink);font-weight:600}
+.legal-note{font:400 12px var(--f-mono);color:var(--dim);margin:10px 0 0}
+.legal-doc{border:1px solid var(--line);background:var(--hull);margin-top:10px}
+.legal-doc summary{cursor:pointer;padding:14px 18px;font:600 13px var(--f-display);letter-spacing:.12em;text-transform:uppercase;color:var(--ink)}
+.legal-doc summary:hover{color:var(--cyan)}
+.legal-doc pre{margin:0;padding:16px 18px;border-top:1px solid var(--line);max-height:420px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:400 12.5px/1.6 var(--f-mono);color:var(--dim);background:#05040b}
+@media (max-width:900px){.legal-grid{grid-template-columns:minmax(0,1fr)}}
+
+/* Schemes */
+.schemes{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.scheme{appearance:none;border:1px solid var(--line);background:var(--hull);color:var(--ink);padding:0;cursor:pointer;text-align:left;font:inherit;min-width:0}
+.scheme .sw{height:84px;background:linear-gradient(135deg,var(--s1),var(--s2) 60%,var(--s3))}
+.scheme span{display:block;padding:10px 12px;font:600 13px var(--f-display);letter-spacing:.08em;text-transform:uppercase}
+.scheme[aria-pressed="true"]{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan),0 0 24px -6px var(--cyan)}
+.note{font:400 12px var(--f-mono);color:var(--dim);margin-top:14px}
+
+/* Terminal */
+.term{border:1px solid var(--line);background:#05040b;font-family:var(--f-mono);overflow:hidden}
+.term-head{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);font-size:12px;color:var(--dim);letter-spacing:.12em}
+.term-head i{width:10px;height:10px;background:var(--pink);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+.term-head i+i{background:var(--cyan)}
+.cmd{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr) auto;gap:16px;align-items:center;padding:12px 14px;border-bottom:1px dashed var(--line)}
+.cmd:last-child{border-bottom:0}
+.cmd code{color:var(--cyan);font-size:15px;overflow-wrap:anywhere}
+.cmd code::before{content:"> ";color:var(--pink)}
+.cmd span{color:var(--dim);font-size:13px}
+.copy{appearance:none;background:transparent;border:1px solid var(--line);color:var(--dim);font:500 11px var(--f-mono);letter-spacing:.12em;padding:6px 10px;cursor:pointer}
+.copy:hover{color:var(--cyan);border-color:var(--cyan)}
+
+/* Install */
+ol.steps{list-style:none;counter-reset:s;padding:0;margin:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+ol.steps li{counter-increment:s;position:relative;padding:44px 16px 18px;border-top:2px solid var(--line);color:var(--dim);font-size:15px;min-width:0}
+ol.steps li::before{content:counter(s,decimal-leading-zero);position:absolute;top:10px;left:16px;font:700 20px var(--f-display);color:var(--cyan)}
+ol.steps li:hover{border-top-color:var(--pink)}
+ol.steps b{color:var(--ink);font-weight:600}
+ol.steps code{font:12px var(--f-mono);color:var(--ink);overflow-wrap:anywhere}
+
+/* Final CTA + footer */
+.final{margin-top:96px;padding:56px 28px;text-align:center;position:relative;border:1px solid var(--line);
+  background:radial-gradient(80% 140% at 50% 0%,rgba(255,43,214,.22),transparent 60%),radial-gradient(80% 140% at 50% 100%,rgba(34,228,255,.18),transparent 60%),var(--hull)}
+.final h2{font:700 italic clamp(28px,4.4vw,52px)/1.05 var(--f-display);margin:0 0 12px;text-wrap:balance}
+.final p{color:var(--dim);margin:0 auto 26px;max-width:52ch}
+footer{padding-block:40px 48px;color:var(--dim);font-size:13px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:72px}
+footer a{color:var(--dim)}
+
+/* Community forum */
+.forum{border:1px solid var(--line);background:linear-gradient(180deg,var(--hull-2),var(--hull) 40%)}
+.f-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}
+.chip{appearance:none;border:1px solid var(--line);background:transparent;color:var(--dim);font:600 12px var(--f-display);letter-spacing:.14em;text-transform:uppercase;padding:7px 12px;cursor:pointer}
+.chip:hover{color:var(--ink)}
+.chip[aria-pressed="true"]{color:var(--void);background:var(--cyan);border-color:var(--cyan)}
+.f-bar .btn{margin-left:auto;padding:10px 18px;font-size:12px}
+.f-note{padding:14px 16px;font:400 13px var(--f-mono);color:var(--dim);border-bottom:1px solid var(--line)}
+.f-note.err{color:var(--flare)}
+.composer{display:grid;gap:12px;padding:18px 16px;border-bottom:1px solid var(--line);background:rgba(0,0,0,.25)}
+.composer label{display:grid;gap:6px;font:600 11px var(--f-display);letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.composer input,.composer select,.composer textarea,.reply-box textarea{font:400 15px var(--f-body);color:var(--ink);background:#05040b;border:1px solid var(--line);padding:10px 12px;width:100%;min-width:0}
+.composer input:focus,.composer select:focus,.composer textarea:focus,.reply-box textarea:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan)}
+.composer textarea,.reply-box textarea{min-height:120px;resize:vertical}
+.row2{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:12px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.actions .btn{padding:10px 20px;font-size:12px}
+.msg{font:400 12px var(--f-mono);color:var(--dim)}
+.msg.err{color:var(--flare)}
+.threads{list-style:none;margin:0;padding:0}
+.thread{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 16px;border-bottom:1px dashed var(--line);cursor:pointer;background:transparent;width:100%;text-align:left;border-left:0;border-right:0;border-top:0;color:var(--ink);font:inherit}
+.thread:hover{background:rgba(34,228,255,.05)}
+.thread:last-child{border-bottom:0}
+.av{width:34px;height:34px;border-radius:50%;object-fit:cover;background:var(--line);flex:none}
+.t-title{font:600 17px var(--f-display);overflow-wrap:anywhere}
+.t-meta{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;font:400 12px var(--f-mono);color:var(--dim);margin-top:3px}
+.pill{font:600 10px var(--f-display);letter-spacing:.16em;text-transform:uppercase;padding:3px 8px;border:1px solid currentColor}
+.pill.support{color:var(--cyan)}.pill.bug{color:var(--flare)}.pill.suggestion{color:var(--pink)}.pill.general{color:var(--dim)}
+.pill.solved{color:#5dffa8}
+.t-side{font:400 12px var(--f-mono);color:var(--dim);text-align:right;white-space:nowrap}
+.empty{padding:36px 16px;text-align:center;color:var(--dim)}
+.empty b{display:block;font:700 20px var(--f-display);color:var(--ink);margin-bottom:6px}
+.view{padding:18px 16px;display:grid;gap:18px}
+.back{appearance:none;background:transparent;border:0;color:var(--cyan);font:600 12px var(--f-display);letter-spacing:.16em;text-transform:uppercase;cursor:pointer;padding:0;justify-self:start}
+.post{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px}
+.post-body{white-space:pre-wrap;overflow-wrap:anywhere;color:var(--ink);margin-top:6px}
+.post-head{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:baseline;font:400 12px var(--f-mono);color:var(--dim)}
+.post-head strong{font:600 14px var(--f-display);color:var(--ink)}
+.op{border-left:2px solid var(--cyan);padding-left:14px}
+.v-title{font:700 clamp(22px,3vw,30px)/1.15 var(--f-display);margin:0;overflow-wrap:anywhere;text-wrap:balance}
+.replies{display:grid;gap:16px;padding-left:16px;border-left:1px solid var(--line)}
+.reply-box{display:grid;gap:10px}
+.mod{display:flex;gap:10px;flex-wrap:wrap}
+.mini{appearance:none;background:transparent;border:1px solid var(--line);color:var(--dim);font:500 11px var(--f-mono);letter-spacing:.1em;padding:6px 10px;cursor:pointer}
+.mini:hover{color:var(--ink);border-color:var(--cyan)}
+.mini.danger:hover{color:var(--flare);border-color:var(--flare)}
+@media (max-width:560px){.row2{grid-template-columns:minmax(0,1fr)}.thread{grid-template-columns:auto minmax(0,1fr)}.t-side{display:none}}
+
+@media (max-width:900px){
+  .pitch,.morph,.style{grid-template-columns:minmax(0,1fr)}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .schemes{grid-template-columns:repeat(3,minmax(0,1fr))}
+  ol.steps{grid-template-columns:minmax(0,1fr)}
+  .frame{transform:none}
+}
+@media (max-width:560px){
+  .grid{grid-template-columns:minmax(0,1fr)}
+  .schemes{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .nav ul{display:none}
+  .nav-social{margin-left:auto}
+  .nav-social a{width:auto}
+  .nav-social i{width:38px;height:38px}
+  .nav-social svg{width:22px;height:22px}
+  .nav-social span{display:none}
+  .cmd{grid-template-columns:minmax(0,1fr) auto}
+  .cmd span{grid-column:1/-1;grid-row:2}
+  .rec{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top"><img id="cfg-logo" alt="" hidden><span id="cfg-logo-text">ASPHYXIA</span><b id="cfg-logo-accent">//UI</b></a>
+    <ul>
+      <li><a href="#systems">Systems</a></li>
+      <li><a href="#frames">Frames</a></li>
+      <li><a href="#schemes">Schemes</a></li>
+      <li><a href="#commands">Commands</a></li>
+      <li><a href="#install">Install</a></li>
+      <li><a href="#community">Community</a></li>
+      <li><a href="#support">Support</a></li>
+      <li><a href="#legal">License</a></li>
+    </ul>
+    <nav class="nav-social" aria-label="Community and support links"><a id="cfg-nav-paypal" class="paypal" title="PayPal" hidden><i><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7.016 19.198h-4.2a.562.562 0 0 1-.555-.65L5.093.584A.692.692 0 0 1 5.776 0h7.222c3.417 0 5.904 2.488 5.846 5.5-.006.25-.027.5-.066.747A6.794 6.794 0 0 1 12.071 12H8.743a.69.69 0 0 0-.682.583l-.325 2.056-.013.083-.692 4.39-.015.087zM19.79 6.142c-.01.087-.01.175-.023.261a7.76 7.76 0 0 1-7.695 6.598H9.007l-.283 1.795-.013.083-.692 4.39-.134.843-.014.088H6.86l-.497 3.15a.562.562 0 0 0 .555.65h3.612c.34 0 .63-.249.683-.585l.952-6.031a.692.692 0 0 1 .683-.584h2.126a6.793 6.793 0 0 0 6.707-5.752c.306-1.95-.466-3.744-1.89-4.906z"/></svg></i><span>Support the project</span></a><a id="cfg-nav-youtube" class="youtube" title="YouTube" hidden><i><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/><path fill="#fff" d="M9.545 15.568V8.432L15.818 12z"/></svg></i><span>Official channel</span></a><a id="cfg-nav-discord" class="discord" title="Discord" hidden><i><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg></i><span>Join the community</span></a><a id="cfg-nav-patreon" class="patreon" title="Patreon" hidden><i><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M22.957 7.21c-.004-3.064-2.391-5.576-5.191-6.482-3.478-1.125-8.064-.962-11.384.604C2.357 3.231 1.093 7.391 1.046 11.54c-.039 3.411.302 12.396 5.369 12.46 3.765.047 4.326-4.804 6.068-7.141 1.24-1.662 2.836-2.132 4.801-2.618 3.376-.836 5.678-3.501 5.673-7.031Z"/></svg></i><span>Become a patron</span></a><a id="cfg-nav-github" class="github" title="GitHub" hidden><i><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></i><span>Source &amp; releases</span></a></nav>
+    <a class="btn js-dl" href="https://github.com/Rez666/asphyxia-ui-site/releases/download/asphyxia-latest/Asphyxia-UI.zip">Download</a>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <div class="screen">
+      <img id="cfg-banner" src="img/banner.webp" alt="Asphyxia-UI banner: a chrome cyber skull with glowing cyan eyes and headphones, trailing fire through a neon nebula full of meteors" width="1925" height="817">
+      <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+      <div class="rec"><i></i>LIVE · WOW FOREVER</div>
+    </div>
+
+    <div class="pitch">
+      <div>
+        <div class="boot" id="boot">&gt; initializing interface…</div>
+        <h1><span id="cfg-headline">One interface.</span><br><span class="glitch" id="cfg-glitch" data-text="Built to haunt Azeroth.">Built to haunt Azeroth.</span></h1>
+        <p class="lede" id="cfg-intro">Asphyxia-UI replaces your unit frames, bars, bags, chat, map and Blizzard windows with one dark, neon-lit design: gunmetal panels, cyan-to-pink accents and skull artwork, made only for WoW Forever.</p>
+        <div class="ctas">
+          <a class="btn js-dl" href="https://github.com/Rez666/asphyxia-ui-site/releases/download/asphyxia-latest/Asphyxia-UI.zip">Download Asphyxia-UI.zip</a>
+          <a class="btn ghost" href="#systems">See what's inside</a>
+        </div>
+      </div>
+      <aside class="readout" aria-label="Build status">
+        <h2>System readout</h2>
+        <dl>
+          <dt>Build</dt><dd id="cfg-version">26.1.136-alpha</dd>
+          <dt>Client</dt><dd>WoW Forever</dd>
+          <dt>Channel</dt><dd class="ok">Rolling · main</dd>
+          <dt>Status</dt><dd class="warn" id="cfg-status">Active development</dd>
+          <dt>Skin engine</dt><dd class="ok">Online</dd>
+          <div class="bar" aria-hidden="true"><span></span></div>
+        </dl>
+      </aside>
+    </div>
+  </div>
+
+  <div class="ticker" aria-hidden="true"><div>
+    <span>Unit frames</span><span>Action bars</span><span>Nameplates</span><span>Inventory</span><span>Asphyxia-DPS</span><span>Raid Control</span><span>Armory</span><span>Map &amp; Quest Log</span><span>Movers</span><span>Skin engine</span>
+    <span>Unit frames</span><span>Action bars</span><span>Nameplates</span><span>Inventory</span><span>Asphyxia-DPS</span><span>Raid Control</span><span>Armory</span><span>Map &amp; Quest Log</span><span>Movers</span><span>Skin engine</span>
+  </div></div>
+
+  <div class="wrap">
+    <section id="systems">
+      <div class="eyebrow">// Systems online</div>
+      <h2 class="title">Every corner of the screen, one design</h2>
+      <p class="sub">From the health bar under your thumb to the profession window you open once a week, everything shares the same surfaces, fonts and accents.</p>
+      <div class="grid">
+        <article class="sys"><div class="tag">UNIT FRAMES</div><h3>Four frame styles</h3><p>Player, target, focus, pet, party, raid, boss and arena frames in four styles: skull-art Morph, classic Norm, clean Eclipse, or Dark Matter with its power ring.</p></article>
+        <article class="sys"><div class="tag">COMBAT</div><h3>Bars &amp; nameplates</h3><p>Configurable action bars with fading and geometry controls, plus nameplates, cast bars, auras and tooltips tuned for fights.</p></article>
+        <article class="sys"><div class="tag">INVENTORY</div><h3>Unified bags</h3><p>Built in-house: category headings, search, favorites, quality accents and a two-click Sell gray that never touches favorites.</p></article>
+        <article class="sys"><div class="tag">METER</div><h3>Asphyxia-DPS</h3><p>A themed face for WoW Forever's native damage meter, with compact and split layouts and class icons. Toggle with <code>/adps</code>.</p></article>
+        <article class="sys"><div class="tag">RAID</div><h3>Raid Control</h3><p>Target markers, a marker wheel, ready-check display and pull and break timers, ready when you lead.</p></article>
+        <article class="sys"><div class="tag">SKIN ENGINE</div><h3>Blizzard windows</h3><p>The map, quest log, professions, flight map, mail and more pick up Asphyxia panels and Ironclad type automatically.</p></article>
+      </div>
+    </section>
+
+    <section id="frames">
+      <div class="eyebrow">// Frame styles</div>
+      <h2 class="title">Four ways to wear it</h2>
+      <p class="sub">Pick a unit frame style in <code style="font-family:var(--f-mono);color:var(--cyan)">/asp</code> &gt; Unit Frames. Each one keeps your other settings, so you can switch between them.</p>
+      <div class="styles">
+        <article class="style">
+          <div class="stage"><img src="img/f-norm.webp" alt="Norm player frame: name and level bar above a full portrait health bar, with a blue-to-purple power bar underneath" width="1826" height="464" style="width:90.5%" loading="lazy"></div>
+          <div class="style-copy">
+            <div class="tag">STYLE 01 · CLASSIC</div>
+            <h3>Norm</h3>
+            <ul class="ticks">
+              <li><span><b>Name and level bar</b> sits above the frame, clear of the portrait.</span></li>
+              <li><span><b>Full portrait health bar</b> with health and percent in the corner.</span></li>
+              <li><span><b>Full-width power bar</b> directly underneath.</span></li>
+            </ul>
+          </div>
+        </article>
+        <article class="style">
+          <div class="stage"><img src="img/f-morph.webp" alt="Asphyxia-Morph player frame: segmented blue-to-purple health bar, lightning orb on the left and a chrome skull emblem with headphones" width="2018" height="434" style="width:100.0%" loading="lazy"></div>
+          <div class="style-copy">
+            <div class="tag">STYLE 02 · SIGNATURE</div>
+            <h3>Asphyxia-Morph</h3>
+            <ul class="ticks">
+              <li><span><b>Segmented health</b> in class-inspired colour, readable at a glance mid-pull.</span></li>
+              <li><span><b>Skull emblem</b> on every frame, mirrored for your target.</span></li>
+              <li><span><b>Lightning orb</b> and an angular power bar tucked under the health.</span></li>
+            </ul>
+          </div>
+        </article>
+        <article class="style">
+          <div class="stage"><img src="img/f-eclipse.webp" alt="Eclipse player frame: name and level bar, portrait health bar framed by bracket rails and an inset power bar" width="1900" height="476" style="width:94.2%" loading="lazy"></div>
+          <div class="style-copy">
+            <div class="tag">STYLE 03 · CLEAN</div>
+            <h3>Eclipse</h3>
+            <ul class="ticks">
+              <li><span><b>Bracket rails</b> frame the health bar for a sharper outline.</span></li>
+              <li><span><b>Full portrait health bar</b> with health and percent in the corner.</span></li>
+              <li><span><b>Inset power bar</b> centred under the frame.</span></li>
+            </ul>
+          </div>
+        </article>
+        <article class="style">
+          <div class="stage"><img src="img/f-darkmatter.webp" alt="Dark Matter player frame: black name and level header, portrait health area and a circular mana ring with speed lines on the left" width="1786" height="440" style="width:88.5%" loading="lazy"></div>
+          <div class="style-copy">
+            <div class="tag">STYLE 04 · ALPHA</div>
+            <h3>Dark Matter</h3>
+            <ul class="ticks">
+              <li><span><b>Circular power ring</b> on the outer edge, filling clockwise or counter-clockwise.</span></li>
+              <li><span><b>3D portrait</b> fills the health area, with numeric health in the corner.</span></li>
+              <li><span><b>Solid black header</b> with name and level.</span></li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="schemes">
+      <div class="eyebrow">// Color schemes</div>
+      <h2 class="title">Six hulls to choose from</h2>
+      <p class="sub">Every panel, border and accent follows the scheme you pick in <code style="font-family:var(--f-mono);color:var(--cyan)">/asp</code>. Tap one to tint this page.</p>
+      <div class="schemes" role="group" aria-label="Color scheme preview">
+        <button class="scheme" style="--s1:#2b3038;--s2:#5c6673;--s3:#22e4ff" data-a="#22e4ff" data-b="#ff2bd6" aria-pressed="true" id="sch-gunmetal"><div class="sw"></div><span>Gunmetal</span></button>
+        <button class="scheme" style="--s1:#120d2a;--s2:#3a3470;--s3:#8f7bff" data-a="#8f7bff" data-b="#22e4ff" aria-pressed="false" id="sch-void"><div class="sw"></div><span>Void Steel</span></button>
+        <button class="scheme" style="--s1:#050507;--s2:#1b1b22;--s3:#c9c9d6" data-a="#d9d9e8" data-b="#ff2bd6" aria-pressed="false" id="sch-obsidian"><div class="sw"></div><span>Obsidian</span></button>
+        <button class="scheme" style="--s1:#2a1a14;--s2:#5a3426;--s3:#ff7a2e" data-a="#ff8a3d" data-b="#ff2bd6" aria-pressed="false" id="sch-ember"><div class="sw"></div><span>Ember Steel</span></button>
+        <button class="scheme" style="--s1:#2a2216;--s2:#6b5434;--s3:#e8b765" data-a="#e8b765" data-b="#ff6a3d" aria-pressed="false" id="sch-burnished"><div class="sw"></div><span>Burnished</span></button>
+        <button class="scheme" style="--s1:#1b0b2e;--s2:#6a1f8a;--s3:#ff2bd6" data-a="#ff4fe0" data-b="#22e4ff" aria-pressed="false" id="sch-nebula"><div class="sw"></div><span>Nebula</span></button>
+      </div>
+      <p class="note">Swatches are a web preview of each scheme's mood, not exact in-game values.</p>
+    </section>
+
+    <section id="commands">
+      <div class="eyebrow">// Command line</div>
+      <h2 class="title">Slash commands</h2>
+      <p class="sub">Type these in chat to get where you need to go.</p>
+      <div class="term">
+        <div class="term-head"><i></i><i></i>ASPHYXIA://CHAT</div>
+        <div class="cmd"><code>/asp</code><span>Open the main configuration</span><button class="copy" data-c="/asp">COPY</button></div>
+        <div class="cmd"><code>/aspinstall</code><span>Run the guided installer</span><button class="copy" data-c="/aspinstall">COPY</button></div>
+        <div class="cmd"><code>/aspbags</code><span>Toggle the bag window</span><button class="copy" data-c="/aspbags">COPY</button></div>
+        <div class="cmd"><code>/adps</code><span>Toggle the damage meter</span><button class="copy" data-c="/adps">COPY</button></div>
+        <div class="cmd"><code>/aspdps config</code><span>Damage-meter settings</span><button class="copy" data-c="/aspdps config">COPY</button></div>
+        <div class="cmd"><code>/asprc</code><span>Open Raid Control</span><button class="copy" data-c="/asprc">COPY</button></div>
+      </div>
+    </section>
+
+    <section id="install">
+      <div class="eyebrow">// Deployment</div>
+      <h2 class="title">Install in five steps</h2>
+      <p class="sub">Keep your <code style="font-family:var(--f-mono);color:var(--cyan)">WTF</code> folder when you upgrade and your profiles carry over.</p>
+      <ol class="steps">
+        <li><b>Close WoW Forever</b> completely.</li>
+        <li><b>Back up</b> your AddOns and <code>WTF</code> folders.</li>
+        <li><b>Download</b> <code>Asphyxia-UI.zip</code> and extract it.</li>
+        <li><b>Replace</b> the old folder in <code>Interface/AddOns</code> with the new <code>Asphyxia-UI</code> folder.</li>
+        <li><b>Enable</b> Asphyxia-UI in the addon list and log in.</li>
+      </ol>
+    </section>
+
+    <section id="community">
+      <div class="eyebrow">// Community</div>
+      <h2 class="title">Forum &amp; support</h2>
+      <p class="sub">Ask for help, report a bug or suggest a feature. Include your build number (type <code style="font-family:var(--f-mono);color:var(--cyan)">/asp</code> to see it) and a screenshot description so issues can be reproduced.</p>
+      <div class="forum" style="padding:28px 22px;display:grid;gap:16px">
+        <div class="t-meta"><span class="pill support">Support</span><span class="pill bug">Bug reports</span><span class="pill suggestion">Suggestions</span><span class="pill general">General</span></div>
+        <p style="margin:0;color:var(--dim);max-width:60ch">The Asphyxia-UI forum lives on GitHub Discussions. Sign in with a free GitHub account to start a thread, reply, or mark your question answered.</p>
+        <div class="ctas"><a class="btn" href="https://github.com/Rez666/asphyxia-ui-site/discussions">Open the forum</a><a class="btn ghost" href="https://github.com/Rez666/asphyxia-ui-site/discussions/new/choose">Start a thread</a></div>
+      </div>
+    </section>
+
+    <section id="support">
+      <div class="eyebrow">// Support the project</div>
+      <h2 class="title" id="cfg-support-title">Keep the skull burning</h2>
+      <p class="sub" id="cfg-support-text">Asphyxia-UI is free. Join the community, watch the build videos, or chip in to keep development going.</p>
+      <div class="links">
+        <a class="link-card discord" id="cfg-discord" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg><span><b>Discord</b><small>Chat, help and update news</small></span><em>Join</em></a>
+        <a class="link-card youtube" id="cfg-youtube" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/><path fill="#fff" d="M9.545 15.568V8.432L15.818 12z"/></svg><span><b>YouTube</b><small>Showcases and setup guides</small></span><em>Watch</em></a>
+        <a class="link-card patreon" id="cfg-patreon" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M22.957 7.21c-.004-3.064-2.391-5.576-5.191-6.482-3.478-1.125-8.064-.962-11.384.604C2.357 3.231 1.093 7.391 1.046 11.54c-.039 3.411.302 12.396 5.369 12.46 3.765.047 4.326-4.804 6.068-7.141 1.24-1.662 2.836-2.132 4.801-2.618 3.376-.836 5.678-3.501 5.673-7.031Z"/></svg><span><b>Patreon</b><small>Monthly support and early looks</small></span><em>Become a patron</em></a>
+        <a class="link-card paypal" id="cfg-paypal" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7.016 19.198h-4.2a.562.562 0 0 1-.555-.65L5.093.584A.692.692 0 0 1 5.776 0h7.222c3.417 0 5.904 2.488 5.846 5.5-.006.25-.027.5-.066.747A6.794 6.794 0 0 1 12.071 12H8.743a.69.69 0 0 0-.682.583l-.325 2.056-.013.083-.692 4.39-.015.087zM19.79 6.142c-.01.087-.01.175-.023.261a7.76 7.76 0 0 1-7.695 6.598H9.007l-.283 1.795-.013.083-.692 4.39-.134.843-.014.088H6.86l-.497 3.15a.562.562 0 0 0 .555.65h3.612c.34 0 .63-.249.683-.585l.952-6.031a.692.692 0 0 1 .683-.584h2.126a6.793 6.793 0 0 0 6.707-5.752c.306-1.95-.466-3.744-1.89-4.906z"/></svg><span><b>PayPal</b><small>One-time donation</small></span><em>Donate</em></a>
+        <a class="link-card github" id="cfg-github" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg><span><b>GitHub</b><small>Source code, releases and issues</small></span><em>View projects</em></a>
+      </div>
+      <p class="msg" id="cfg-links-empty">Community and donation links are coming soon.</p>
+    </section>
+
+    <div class="final">
+      <h2>Ready to suit up?</h2>
+      <p>Grab the latest validated build. It's packaged automatically from every change that passes testing.</p>
+      <a class="btn js-dl" href="https://github.com/Rez666/asphyxia-ui-site/releases/download/asphyxia-latest/Asphyxia-UI.zip">Download Asphyxia-UI.zip</a>
+    </div>
+
+    <section id="legal" class="legal">
+      <div class="eyebrow">// License &amp; credits</div>
+      <h2 class="title">Fair use, fair credit</h2>
+      <div class="legal-grid">
+        <div class="legal-card">
+          <h3>License</h3>
+          <p><b>&copy; 2026 Asphyxia (Rez I.).</b> All rights reserved in the original Asphyxia-UI material.</p>
+          <ul class="legal-list">
+            <li><b>You may</b> download, install and run Asphyxia-UI for personal gameplay and testing, and keep a personal backup.</li>
+            <li><b>You may not</b> copy, modify, redistribute, sublicense, sell or reuse the original code or artwork in another project without written permission.</li>
+            <li><b>Third-party</b> libraries, fonts and media keep their own licenses, which take precedence for that material.</li>
+            <li>Provided "as is", without warranty. Full terms below.</li>
+          </ul>
+        </div>
+        <div class="legal-card">
+          <h3>Credits &amp; thanks</h3>
+          <ul class="legal-list">
+            <li><b>Simpy, Elv22, and Tukz</b> — Thank you for the inspiration and encouragement throughout my addon-development journey.</li>
+            <li><b>Hydra</b> — Thank you for getting me into Lua through the original AsphyxiaUI project and helping spark the journey that led here.</li>
+            <li><b>Safturento</b> — Thank you for your advice and help with the original AsphyxiaUI.</li>
+            <li><b>Jiberish and Eltruism</b> — Thank you for the inspiration your UI work has provided.</li>
+            <li><b>Munglunch</b> — Thank you for the inspiration behind SupervillainUI and its distinctive approach to interface design.</li>
+            <li><b>Library and media authors</b> — Thank you to the authors of the included shared libraries, fonts, textures, and other credited assets. Their individual notices and terms remain applicable.</li>
+          </ul>
+          <p class="legal-note">Inspiration acknowledgments recognize creative influence; they do not imply endorsement or collaboration.</p>
+        </div>
+      </div>
+      <details class="legal-doc">
+        <summary>Full license text</summary>
+        <pre>Asphyxia-UI
+Copyright (c) 2026 Asphyxia (Rez I.).
+All rights reserved in the original material owned by the copyright holder.
+
+For original material covered by this notice, permission is granted to download,
+install, and run authorized copies of Asphyxia-UI for personal gameplay and testing.
+Except as permitted by applicable law or separate written permission, no other
+rights are granted to copy, modify, redistribute, sublicense, sell, or incorporate
+that material into another project. Copies necessary for the permitted use and
+personal backup are allowed. Keep applicable copyright and license notices intact.
+
+THIRD-PARTY MATERIAL
+This notice does not claim ownership of, relicense, or grant rights to third-party
+code, fonts, textures, artwork, trademarks, or other material. Such material remains
+subject to its own licenses and permissions, which take precedence for that material.
+See the included third-party notices and Media/IMPORTED-MEDIA.txt.
+In particular, this notice does not grant permission to redistribute Baganator or
+Syndicator. Their inclusion requires authorization from their rights holder.
+
+LIBSHAREDMEDIA COMBINATION EXCEPTION
+Notwithstanding the restrictions above, recipients may modify Asphyxia-UI for
+their own use and reverse engineer it for debugging such modifications as
+required by LGPL v2.1 section 6, including using an interface-compatible modified
+LibSharedMedia library. This permission applies to project-owned code; the
+library and other third-party components retain their own terms. No general
+permission to redistribute original Asphyxia-UI code or artwork is granted.
+See THIRD-PARTY-NOTICES.txt and Libs/LibSharedMedia-3.0/LICENSE.txt.
+
+DISCLAIMER
+To the extent permitted by applicable law, the original material is provided
+&quot;AS IS&quot;, without warranties of any kind, express or implied. The copyright holder
+is not liable for claims, damages, or other liability arising from its use.</pre>
+      </details>
+      <details class="legal-doc">
+        <summary>Third-party notices (libraries, fonts, GearScore formula)</summary>
+        <pre>LibSharedMedia-3.0
+Author: Elkano (elkano@gmx.de); inspired by SurfaceLib by Haste/Otravi.
+Bundled revision marker: 176; library minor version: 12000002.
+Source: https://repos.wowace.com/wow/libsharedmedia-3-0/!svn/bc/176/trunk/LibSharedMedia-3.0/LibSharedMedia-3.0.lua
+License: GNU Lesser General Public License version 2.1.
+The library and its use are covered by that license; its complete text is in
+Libs/LibSharedMedia-3.0/LICENSE.txt. Readable source is included in that folder.
+The bundled copy has compatibility changes (bit32 fallback and optional
+C_UIFileAsset.IsKnownFile). These were already present when inspected on
+2026-10-10; the historical edit dates have not been established in this audit.
+This source is not an unmodified upstream distribution.
+To use a modified copy, edit/replace its Lua file with an interface-compatible
+version and restart WoW. Another addon&#x27;s newer library can take precedence
+through LibStub; disable that addon when testing a replacement in isolation.
+No warranty is provided, as specified in the accompanying LGPL license.
+
+LibStub
+The bundled file explicitly places LibStub in the public domain.
+Credits retained in source: Kaelten, Cladhaire, ckknight, Mikk, Ammo,
+Nevcairiel, joshborke.
+
+CallbackHandler-1.0
+Bundled library minor version: 8, upstream revision marker: 26.
+Project: https://www.curseforge.com/wow/addons/callbackhandler
+Published license: BSD, reproduced in Libs/CallbackHandler-1.0/LICENSE.txt.
+The published notice contains placeholders; these are retained verbatim,
+not replaced with invented copyright information. The bundled source also
+has a securecallfunction compatibility fallback. Existing attribution is retained.
+
+The library notices above cover those three shared-media libraries only. They do not grant
+rights to unrelated code or assets. See other included notices and
+Media/IMPORTED-MEDIA.txt. Media registration does not change an asset&#x27;s license.
+
+
+THIRD-PARTY FONT FAMILIES (added 2026-10-18)
+
+Bespoke
+Copyright (c) 2016, Metaflop (http://www.metaflop.com), Simon Egli, Marco Mueller, Alexis Reigel, with Reserved Font Name Bespoke.
+Distributed under the SIL Open Font License 1.1 option of the original dual GPLv3/OFL license.
+The supplied OFL template is preserved verbatim; its placeholders are identified by the original font metadata above.
+Notices: Media/Fonts/Packs/ThirdParty/Bespoke/
+
+Eightgon
+Copyright © 2024 GGBotNet (https://ggbot.net), with Reserved Font Name &quot;Eightgon&quot;.
+SIL Open Font License 1.1. See OFL.txt.
+Notices: Media/Fonts/Packs/ThirdParty/Eightgon/
+
+ControlFreak
+© 2001, Graham Meade. All rights reserved.
+Author-defined freeware terms, reproduced verbatim in LICENSE.txt. Unmodified fonts bundled with the free addon. Do not modify for redistribution or sell these fonts.
+Author license source: https://st.1001fonts.net/license/control-freak/readme.txt
+License checked: 2026-10-18.
+Notices: Media/Fonts/Packs/ThirdParty/ControlFreak/
+
+These fonts retain their own licenses, copyright notices, and original names.
+The project-owned-material restrictions in LICENSE do not relicense these fonts.
+
+
+Gputeks
+Copyright (c) 2008, gluk (gluksza@wp.pl), with Reserved Font Name Gputeks.
+SIL Open Font License 1.1. Original regular/bold font binaries are unchanged.
+Source: https://www.glukfonts.pl/font.php?font=Gputeks
+License and credits: Media/Fonts/Packs/ThirdParty/Gputeks/
+
+Trueno
+Original design: Julieta Ulanovsky (copyright 2011-2015).
+Design modifications and new weights 2015: Jasper / Cannot Into Space Fonts.
+Derived from Montserrat; its original Reserved Font Name notice is preserved.
+SIL Open Font License 1.1. Supplied font binaries are unchanged.
+Source: https://www.fontspace.com/trueno-font-f22345
+License, credits and original FONTLOG: Media/Fonts/Packs/ThirdParty/Trueno/
+
+The fonts remain separately licensed under the OFL, not Asphyxia-UI&#x27;s
+project-owned-material license. No author endorsement is implied.
+
+
+ARMORY GEARSCORE CALCULATION (added 2026-11-18)
+
+The compact Classic/Forever GearScore calculation in Modules/Armory.lua adapts
+the coefficient and slot-weight calculation in TacoTip&#x27;s gearscore.lua.
+TacoTip is based on the original GearScoreLite by Mirrikat45 and others.
+Source: https://github.com/ssdeanx/TacoTip-Gearscore-TBC/blob/1f9222276683b97bfbc0333a55461de97739795a/gearscore.lua
+Formula/client comparison and changes are documented in
+Docs/Armory-Equipment-Metrics.md. No external GearScore addon or library is
+bundled. The adapted portion remains under its MIT license; the project-owned
+material restrictions in LICENSE do not replace these permissions.
+
+MIT License
+
+Copyright (C) kebabstorm (Original TacoTip — https://www.curseforge.com/wow/addons/tacotip-gearscore-talents)
+Copyright (C) 2026 AcidBomb
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the &quot;Software&quot;), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</pre>
+      </details>
+      <p class="legal-note">The license and notices are also included in every download (LICENSE and THIRD-PARTY-NOTICES.txt).</p>
+    </section>
+
+    <div class="thanks" id="thanks">
+      <div class="eyebrow">// Special thanks</div>
+      <ul class="thanks-list"><li><span>Tukz</span></li><li><span>Hydra</span></li><li><span>Elv22</span></li><li><span>Safturento</span></li><li><span>Ekst</span></li><li><span>Munglunch</span></li><li><span>Simpy</span></li><li><span>ElvUI team</span></li></ul>
+    </div>
+
+    <footer>
+      <span>&copy; 2026 Asphyxia (Rez I.) · Asphyxia-UI · All rights reserved · For WoW Forever only · alpha build, features may change</span>
+      <span class="foot-links"><a id="cfg-foot-discord" hidden>Discord</a><a id="cfg-foot-youtube" hidden>YouTube</a><a id="cfg-foot-patreon" hidden>Patreon</a><a id="cfg-foot-paypal" hidden>PayPal</a><a id="cfg-foot-github" hidden>GitHub</a><a href="https://github.com/Rez666/asphyxia-ui-site/releases/tag/asphyxia-latest">Release notes</a></span>
+    </footer>
+  </div>
+</main>
+
+<script>
+(function(){
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var root=document.documentElement;
+
+  /* Meteor field */
+  var c=document.getElementById('sky'),x=c.getContext('2d'),W,H,dpr,stars=[],meteors=[];
+  function size(){dpr=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);
+    stars=[];var n=Math.round(W*H/5200);for(var i=0;i<n;i++)stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.3+.2,t:Math.random()*6.28,s:.01+Math.random()*.03,h:Math.random()<.5?'34,228,255':(Math.random()<.5?'255,43,214':'236,233,255')});}
+  function spawn(){var sp=6+Math.random()*7;meteors.push({x:W*(.3+Math.random()*.9),y:-40,vx:-sp*.72,vy:sp*.7,len:90+Math.random()*140,life:1,w:1+Math.random()*2.2});}
+  function accent(){return getComputedStyle(root).getPropertyValue('--cyan').trim()||'#22e4ff';}
+  var nebulaA=0;
+  function frame(){
+    x.clearRect(0,0,W,H);
+    nebulaA+=.0015;
+    var g=x.createRadialGradient(W*.15+Math.sin(nebulaA)*60,H*.3,0,W*.15,H*.3,W*.6);g.addColorStop(0,'rgba(255,43,214,.16)');g.addColorStop(1,'rgba(255,43,214,0)');x.fillStyle=g;x.fillRect(0,0,W,H);
+    var g2=x.createRadialGradient(W*.9,H*.75+Math.cos(nebulaA)*50,0,W*.9,H*.75,W*.55);g2.addColorStop(0,'rgba(34,228,255,.13)');g2.addColorStop(1,'rgba(34,228,255,0)');x.fillStyle=g2;x.fillRect(0,0,W,H);
+    for(var i=0;i<stars.length;i++){var s=stars[i];s.t+=s.s;x.fillStyle='rgba('+s.h+','+(.35+.45*Math.sin(s.t))+')';x.beginPath();x.arc(s.x,s.y,s.r,0,6.28);x.fill();}
+    if(!reduce&&Math.random()<.025&&meteors.length<5)spawn();
+    for(var j=meteors.length-1;j>=0;j--){var m=meteors[j];m.x+=m.vx;m.y+=m.vy;
+      var tx=m.x-m.vx/Math.hypot(m.vx,m.vy)*m.len,ty=m.y-m.vy/Math.hypot(m.vx,m.vy)*m.len;
+      var lg=x.createLinearGradient(m.x,m.y,tx,ty);lg.addColorStop(0,'rgba(255,240,200,.95)');lg.addColorStop(.15,'rgba(255,176,46,.8)');lg.addColorStop(.5,'rgba(255,60,40,.35)');lg.addColorStop(1,'rgba(255,43,214,0)');
+      x.strokeStyle=lg;x.lineWidth=m.w;x.lineCap='round';x.beginPath();x.moveTo(m.x,m.y);x.lineTo(tx,ty);x.stroke();
+      x.fillStyle='rgba(255,230,180,.9)';x.beginPath();x.arc(m.x,m.y,m.w*1.3,0,6.28);x.fill();
+      if(m.y>H+200||m.x<-200)meteors.splice(j,1);}
+    if(!reduce)requestAnimationFrame(frame);
+  }
+  size();addEventListener('resize',size);frame();
+
+  /* Boot line */
+  var lines=['> initializing interface…','> loading unit frames… ok','> skin engine: online','> welcome back, champion.'],bi=0,el=document.getElementById('boot');
+  if(!reduce){setInterval(function(){bi=(bi+1)%lines.length;el.textContent=lines[bi];},2200);}
+
+  /* Scheme tint */
+  var btns=document.querySelectorAll('.scheme');
+  function pick(b){btns.forEach(function(o){o.setAttribute('aria-pressed',o===b?'true':'false');});
+    root.style.setProperty('--cyan',b.dataset.a);root.style.setProperty('--pink',b.dataset.b);
+    try{localStorage.setItem('asp-scheme',b.id);}catch(e){}}
+  btns.forEach(function(b){b.addEventListener('click',function(){pick(b);});});
+  try{var saved=localStorage.getItem('asp-scheme');if(saved&&document.getElementById(saved))pick(document.getElementById(saved));}catch(e){}
+
+  /* Copy */
+  document.querySelectorAll('.copy').forEach(function(b){b.addEventListener('click',function(){
+    var t=b.dataset.c;function done(){b.textContent='COPIED';setTimeout(function(){b.textContent='COPY';},1400);}
+    function fallback(){var code=b.parentNode.querySelector('code');var r=document.createRange();r.selectNodeContents(code);var s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='SELECTED';setTimeout(function(){b.textContent='COPY';},1400);}
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,fallback);}else fallback();
+  });});
+})();
+</script>
+
+
+<script>
+/* Applies site.json (edited from /admin). Defaults in the HTML stay when a field is blank or invalid. */
+(function(){
+  function $(id){return document.getElementById(id)}
+  function text(id,v){var e=$(id);if(e&&typeof v==='string'&&v.trim())e.textContent=v.trim()}
+  function url(v){return typeof v==='string'&&/^https:\/\/[^\s"'<>]+$/.test(v.trim())?v.trim():''}
+  function img(v){if(typeof v!=='string'||!v.trim())return '';v=v.trim();
+    if(/^https:\/\//.test(v))return url(v);v=v.replace(/^\/+/,'');return /^img\/[\w\-./]+$/.test(v)&&v.indexOf('..')<0?v:''}
+  function color(v){return typeof v==='string'&&/^#[0-9a-fA-F]{6}$/.test(v.trim())?v.trim():''}
+  fetch('site.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(c){
+    if(!c||typeof c!=='object')return;
+    var b=c.branding||{},h=c.hero||{},col=c.colors||{},l=c.links||{},s=c.support||{},d=c.download||{};
+    text('cfg-logo-text',b.logoText);text('cfg-logo-accent',b.logoAccent);
+    var logo=img(b.logo);if(logo){$('cfg-logo').src=logo;$('cfg-logo').hidden=false}
+    var banner=img(b.banner);if(banner)$('cfg-banner').src=banner;
+    if(typeof b.siteTitle==='string'&&b.siteTitle.trim())document.title=b.siteTitle.trim();
+    var root=document.documentElement,saved=null;try{saved=localStorage.getItem('asp-scheme')}catch(e){}
+    if(!saved||saved==='sch-gunmetal'){
+      if(color(col.accentA))root.style.setProperty('--cyan',color(col.accentA));
+      if(color(col.accentB))root.style.setProperty('--pink',color(col.accentB));}
+    if(color(col.background)){root.style.setProperty('--void',color(col.background));document.body.style.background=color(col.background)}
+    text('cfg-headline',h.headline);
+    if(typeof h.glitchLine==='string'&&h.glitchLine.trim()){$('cfg-glitch').textContent=h.glitchLine.trim();$('cfg-glitch').setAttribute('data-text',h.glitchLine.trim())}
+    text('cfg-intro',h.intro);text('cfg-version',h.version);text('cfg-status',h.status);
+    var dl=url(d.url);if(dl)document.querySelectorAll('.js-dl').forEach(function(a){a.href=dl});
+    text('cfg-support-title',s.title);text('cfg-support-text',s.text);
+    var any=false;['discord','youtube','patreon','paypal','github'].forEach(function(k){var u=url(l[k]);if(!u)return;any=true;
+      [$('cfg-'+k),$('cfg-foot-'+k),$('cfg-nav-'+k)].forEach(function(a){if(a){a.href=u;a.rel='noopener';a.target='_blank';a.hidden=false}})});
+    if(any)$('cfg-links-empty').hidden=true;
+  }).catch(function(){});
+})();
+</script>
+</body>
+</html>
