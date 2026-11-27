@@ -68,4 +68,11 @@ collections:
               - { name: youtube, label: "YouTube channel", widget: string, required: false, pattern: ['^(https://.*)?$', 'Must start with https://'] }
               - { name: patreon, label: "Patreon page", widget: string, required: false, pattern: ['^(https://.*)?$', 'Must start with https://'] }
               - { name: paypal, label: "PayPal donation link", widget: string, required: false, pattern: ['^(https://.*)?$', 'Must start with https://'] }
-              - { name: github, label: "GitHub page", widget: string, required: false, pattern: ['^(https://.*)?$', 'Must start with https://'] }
+              - { name: github, label: "GitHub page", widget: string, required: false, pattern: ['^(https://.*)?
+, 'Must start with https://'] }
+              - { name: discordShowcase, label: "Discord invite for #ui-showcase (blank = main invite)", widget: string, required: false, pattern: ['^(https://.*)?
+, 'Must start with https://'] }
+              - { name: discordMods, label: "Discord invite for #community-mods (blank = main invite)", widget: string, required: false, pattern: ['^(https://.*)?
+, 'Must start with https://'] }
+              - { name: discordSupport, label: "Discord invite for #support (blank = main invite)", widget: string, required: false, pattern: ['^(https://.*)?
+, 'Must start with https://'] }

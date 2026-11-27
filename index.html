@@ -248,6 +248,24 @@ ul.ticks b{color:var(--ink);font-weight:600}
 .style:nth-child(3) .tag{color:var(--flare)}
 .style:nth-child(4) .tag{color:#b48cff}
 
+/* Discord community hub */
+.dc-live{display:inline-flex;align-items:center;gap:8px;margin:-14px 0 22px;padding:6px 12px;border:1px solid var(--line);background:var(--hull);font:500 12px var(--f-mono);color:var(--dim)}
+.dc-live b{color:var(--ink)}
+.dc-dot{width:8px;height:8px;border-radius:50%;background:#3ba55d;box-shadow:0 0 8px #3ba55d;animation:blink 2s steps(2) infinite}
+.dc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:start}
+.dc-card{display:grid;gap:12px;padding:22px;border:1px solid var(--line);background:linear-gradient(160deg,var(--hull-2),var(--hull));min-width:0}
+.dc-card:hover{border-color:#5865F2;box-shadow:0 16px 36px -22px #5865F2}
+.dc-head{display:flex;align-items:center;justify-content:space-between}
+.dc-head svg{width:34px;height:34px;color:#5865F2}
+.dc-head .tag{font:500 11px var(--f-mono);color:var(--cyan);letter-spacing:.08em}
+.dc-card h3{font:700 21px var(--f-display);margin:0}
+.dc-card p{color:var(--dim);margin:0;font-size:15px}
+.dc-card .btn{justify-self:start;padding:11px 20px;font-size:12px;background:linear-gradient(90deg,#5865F2,var(--cyan))}
+.dc-note{font:400 12px/1.5 var(--f-mono);color:var(--dim)}
+.dc-alt{margin-top:18px}
+.dc-alt a{color:var(--cyan)}
+@media (max-width:900px){.dc-grid{grid-template-columns:minmax(0,1fr)}}
+
 /* Support links */
 .brand img{height:28px;width:auto;vertical-align:middle;margin-right:8px}
 .links{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
@@ -614,13 +632,36 @@ footer a{color:var(--dim)}
 
     <section id="community">
       <div class="eyebrow">// Community</div>
-      <h2 class="title">Forum &amp; support</h2>
-      <p class="sub">Ask for help, report a bug or suggest a feature. Include your build number (type <code style="font-family:var(--f-mono);color:var(--cyan)">/asp</code> to see it) and a screenshot description so issues can be reproduced.</p>
-      <div class="forum" style="padding:28px 22px;display:grid;gap:16px">
-        <div class="t-meta"><span class="pill support">Support</span><span class="pill bug">Bug reports</span><span class="pill suggestion">Suggestions</span><span class="pill general">General</span></div>
-        <p style="margin:0;color:var(--dim);max-width:60ch">The Asphyxia-UI forum lives on GitHub Discussions. Sign in with a free GitHub account to start a thread, reply, or mark your question answered.</p>
-        <div class="ctas"><a class="btn" href="https://github.com/Rez666/asphyxia-ui-site/discussions">Open the forum</a><a class="btn ghost" href="https://github.com/Rez666/asphyxia-ui-site/discussions/new/choose">Start a thread</a></div>
+      <h2 class="title">Share your setup on Discord</h2>
+      <p class="sub">The Asphyxia-UI community lives on Discord. Post your screenshots, share your own edited version of the UI, or get help. Moderators keep it clean.</p>
+      <div class="dc-live" id="dc-live" hidden><span class="dc-dot"></span><b id="dc-online">0</b> online · <b id="dc-members">0</b> members on the Asphyxia-UI Discord</div>
+      <div class="dc-grid">
+        <article class="dc-card">
+          <div class="dc-head"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg><span class="tag">#ui-showcase</span></div>
+          <h3>Show off your UI</h3>
+          <p>Post screenshots of your Asphyxia-UI layout, frame style, colors and raid setup. Images, GIFs and short clips welcome.</p>
+          <a class="btn dc-link" data-dc="showcase">Post a screenshot</a>
+        </article>
+        <article class="dc-card mods">
+          <div class="dc-head"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg><span class="tag">#community-mods</span></div>
+          <h3>Share your edited UI</h3>
+          <p>Made your own version? Share it with the community. The license allows it when you:</p>
+          <ul class="legal-list">
+            <li><b>Credit</b> "based on Asphyxia-UI by Asphyxia (Rez I.)" and keep the LICENSE file.</li>
+            <li><b>Rename it</b> and mark it as unofficial.</li>
+            <li><b>Keep it free.</b> No selling, paywalls, donations or ads tied to it.</li>
+          </ul>
+          <p class="dc-note">Large files: post a download link (GitHub release, Google Drive). Community uploads are not checked by us; download at your own risk.</p>
+          <a class="btn dc-link" data-dc="mods">Share your version</a>
+        </article>
+        <article class="dc-card">
+          <div class="dc-head"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg><span class="tag">#support</span></div>
+          <h3>Get help</h3>
+          <p>Stuck or found a bug? Ask in support with your build number (type <code style="font-family:var(--f-mono);color:var(--cyan)">/asp</code> to see it) and a screenshot.</p>
+          <a class="btn dc-link" data-dc="support">Ask for help</a>
+        </article>
       </div>
+      <p class="dc-note dc-alt">Prefer GitHub? <a href="https://github.com/Rez666/asphyxia-ui-site/discussions">Report a bug or suggest a feature on GitHub Discussions</a>.</p>
     </section>
 
     <section id="support">
@@ -990,6 +1031,13 @@ SOFTWARE.</pre>
     var any=false;['discord','youtube','patreon','paypal','github'].forEach(function(k){var u=url(l[k]);if(!u)return;any=true;
       [$('cfg-'+k),$('cfg-foot-'+k),$('cfg-nav-'+k)].forEach(function(a){if(a){a.href=u;a.rel='noopener';a.target='_blank';a.hidden=false}})});
     if(any)$('cfg-links-empty').hidden=true;
+    var mainDc=url(l.discord),dcMap={showcase:url(l.discordShowcase)||mainDc,mods:url(l.discordMods)||mainDc,support:url(l.discordSupport)||mainDc};
+    document.querySelectorAll('.dc-link').forEach(function(a){var u=dcMap[a.getAttribute('data-dc')];if(u){a.href=u;a.target='_blank';a.rel='noopener'}else a.hidden=true});
+    var code=(mainDc.match(/discord(?:\.gg|(?:app)?\.com\/invite)\/([\w-]+)/)||[])[1];
+    if(code)fetch('https://discord.com/api/v10/invites/'+encodeURIComponent(code)+'?with_counts=true').then(function(r){return r.ok?r.json():null}).then(function(d){
+      if(!d||typeof d.approximate_member_count!=='number')return;
+      $('dc-members').textContent=d.approximate_member_count.toLocaleString('en-US');$('dc-online').textContent=(d.approximate_presence_count||0).toLocaleString('en-US');$('dc-live').hidden=false;
+    }).catch(function(){});
   }).catch(function(){});
 })();
 </script>
