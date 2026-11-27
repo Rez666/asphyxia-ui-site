@@ -16,7 +16,9 @@
     "glitchLine": "Built to haunt Azeroth.",
     "intro": "Asphyxia-UI replaces your unit frames, bars, bags, chat, map and Blizzard windows with one dark, neon-lit design: gunmetal panels, cyan-to-pink accents and skull artwork, made only for WoW Forever.",
     "version": "26.1.136-alpha",
-    "status": "Active development"
+    "status": "Active development",
+    "commit": "5111933",
+    "updated": "2026-11-27T15:15:50Z"
   },
   "download": {
     "url": "https://github.com/Rez666/asphyxia-ui-site/releases/download/asphyxia-latest/Asphyxia-UI.zip"

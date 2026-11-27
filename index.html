@@ -480,6 +480,8 @@ footer a{color:var(--dim)}
         <dl>
           <dt>Build</dt><dd id="cfg-version">26.1.136-alpha</dd>
           <dt>Client</dt><dd>WoW Forever</dd>
+          <dt>Build ID</dt><dd id="cfg-commit">latest</dd>
+          <dt>Updated</dt><dd class="ok" id="cfg-updated">Every validated push</dd>
           <dt>Channel</dt><dd class="ok">Rolling · main</dd>
           <dt>Status</dt><dd class="warn" id="cfg-status">Active development</dd>
           <dt>Skin engine</dt><dd class="ok">Online</dd>
@@ -793,6 +795,10 @@ footer a{color:var(--dim)}
     text('cfg-headline',h.headline);
     if(typeof h.glitchLine==='string'&&h.glitchLine.trim()){$('cfg-glitch').textContent=h.glitchLine.trim();$('cfg-glitch').setAttribute('data-text',h.glitchLine.trim())}
     text('cfg-intro',h.intro);text('cfg-version',h.version);text('cfg-status',h.status);
+    if(typeof h.commit==='string'&&/^[0-9a-f]{7,12}$/.test(h.commit))$('cfg-commit').textContent=h.commit;
+    var up=typeof h.updated==='string'?new Date(h.updated):null;
+    if(up&&!isNaN(up)){var mins=Math.max(0,Math.round((Date.now()-up)/60000)),rel=mins<1?'just now':mins<60?mins+' min ago':mins<1440?Math.round(mins/60)+' h ago':Math.round(mins/1440)+' d ago';
+      $('cfg-updated').textContent=rel+' · '+up.toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'UTC'})+' UTC'}
     var dl=url(d.url);if(dl)document.querySelectorAll('.js-dl').forEach(function(a){a.href=dl});
     text('cfg-support-title',s.title);text('cfg-support-text',s.text);
     var any=false;['discord','youtube','patreon','paypal','github'].forEach(function(k){var u=url(l[k]);if(!u)return;any=true;
