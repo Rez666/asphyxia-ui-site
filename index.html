@@ -289,12 +289,6 @@ ul.ticks b{color:var(--ink);font-weight:600}
 .nav-social a:hover i,.nav-social a:focus-visible i{border-color:var(--c);box-shadow:0 0 14px -4px var(--c)}
 .discord{--brand:#5865F2}.youtube{--brand:#FF0000}.patreon{--brand:#FF424D}.paypal{--brand:#009CDE}.github{--brand:#FFFFFF}
 
-/* Special thanks */
-.thanks{margin-top:64px;padding-block:28px 6px;border-top:1px solid var(--line);text-align:center}
-.thanks-list{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 12px}
-.thanks-list li{font:700 16px var(--f-display);letter-spacing:.04em;padding:7px 14px;border:1px solid var(--line);background:var(--hull)}
-.thanks-list span{background:linear-gradient(90deg,var(--pink),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
-.thanks + footer{margin-top:24px}
 
 /* Schemes */
 .schemes{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
@@ -428,7 +422,6 @@ footer a{color:var(--dim)}
       <li><a href="#support">Support</a></li>
     </ul>
     <nav class="nav-social" aria-label="Community and support links"><a id="cfg-nav-paypal" class="paypal" title="PayPal" hidden><i><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7.016 19.198h-4.2a.562.562 0 0 1-.555-.65L5.093.584A.692.692 0 0 1 5.776 0h7.222c3.417 0 5.904 2.488 5.846 5.5-.006.25-.027.5-.066.747A6.794 6.794 0 0 1 12.071 12H8.743a.69.69 0 0 0-.682.583l-.325 2.056-.013.083-.692 4.39-.015.087zM19.79 6.142c-.01.087-.01.175-.023.261a7.76 7.76 0 0 1-7.695 6.598H9.007l-.283 1.795-.013.083-.692 4.39-.134.843-.014.088H6.86l-.497 3.15a.562.562 0 0 0 .555.65h3.612c.34 0 .63-.249.683-.585l.952-6.031a.692.692 0 0 1 .683-.584h2.126a6.793 6.793 0 0 0 6.707-5.752c.306-1.95-.466-3.744-1.89-4.906z"/></svg></i><span>Support the project</span></a><a id="cfg-nav-youtube" class="youtube" title="YouTube" hidden><i><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/><path fill="#fff" d="M9.545 15.568V8.432L15.818 12z"/></svg></i><span>Official channel</span></a><a id="cfg-nav-discord" class="discord" title="Discord" hidden><i><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg></i><span>Join the community</span></a><a id="cfg-nav-patreon" class="patreon" title="Patreon" hidden><i><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M22.957 7.21c-.004-3.064-2.391-5.576-5.191-6.482-3.478-1.125-8.064-.962-11.384.604C2.357 3.231 1.093 7.391 1.046 11.54c-.039 3.411.302 12.396 5.369 12.46 3.765.047 4.326-4.804 6.068-7.141 1.24-1.662 2.836-2.132 4.801-2.618 3.376-.836 5.678-3.501 5.673-7.031Z"/></svg></i><span>Become a patron</span></a><a id="cfg-nav-github" class="github" title="GitHub" hidden><i><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></i><span>Source &amp; releases</span></a></nav>
-    <a class="btn js-dl" href="https://github.com/Rez666/asphyxia-ui-site/releases/download/asphyxia-latest/Asphyxia-UI.zip">Download</a>
   </div>
 </header>
 
@@ -479,7 +472,6 @@ footer a{color:var(--dim)}
         <h1><span id="cfg-headline">One interface.</span><br><span class="glitch" id="cfg-glitch" data-text="Built to haunt Azeroth.">Built to haunt Azeroth.</span></h1>
         <p class="lede" id="cfg-intro">Asphyxia-UI replaces your unit frames, bars, bags, chat, map and Blizzard windows with one dark, neon-lit design: gunmetal panels, cyan-to-pink accents and skull artwork, made only for WoW Forever.</p>
         <div class="ctas">
-          <a class="btn js-dl" href="https://github.com/Rez666/asphyxia-ui-site/releases/download/asphyxia-latest/Asphyxia-UI.zip">Download Asphyxia-UI.zip</a>
           <a class="btn ghost" href="#systems">See what's inside</a>
         </div>
       </div>
@@ -667,14 +659,9 @@ footer a{color:var(--dim)}
     <div class="final">
       <h2>Ready to suit up?</h2>
       <p>Grab the latest validated build. It's packaged automatically from every change that passes testing.</p>
-      <a class="btn js-dl" href="https://github.com/Rez666/asphyxia-ui-site/releases/download/asphyxia-latest/Asphyxia-UI.zip">Download Asphyxia-UI.zip</a>
+      <a class="btn js-dl" href="https://github.com/Rez666/asphyxia-ui-site/releases/download/asphyxia-latest/Asphyxia-UI.zip">Download Asphyxia-UI</a>
     </div>
 
-
-    <div class="thanks" id="thanks">
-      <div class="eyebrow">// Special thanks</div>
-      <ul class="thanks-list"><li><span>Tukz</span></li><li><span>Hydra</span></li><li><span>Elv22</span></li><li><span>Safturento</span></li><li><span>Ekst</span></li><li><span>Munglunch</span></li><li><span>Simpy</span></li><li><span>ElvUI team</span></li></ul>
-    </div>
 
     <footer>
       <span>&copy; 2026 Asphyxia (Rez I.) · Asphyxia-UI · Free to share, not for sale · For WoW Forever only · alpha build, features may change</span>
