@@ -1,0 +1,62 @@
+Asphyxia-UI
+Copyright (c) 2026 Asphyxia (Rez I.).
+
+Asphyxia-UI is free, community-friendly software. This license covers the
+original material owned by the copyright holder ("Asphyxia-UI material"):
+project-owned code, artwork, textures, fonts without their own license, and
+documentation.
+
+PERMISSIONS
+Free of charge, anyone may:
+  1. Download, install, use and back up Asphyxia-UI.
+  2. Modify it, including creating plugins, edits, forks and derived UI packs.
+  3. Share copies of Asphyxia-UI, original or modified, with others.
+
+CONDITIONS
+These permissions apply only while all of the following are met:
+  a. Credit. Keep this LICENSE file and the copyright notice in every copy, and
+     state in the download page or description that the work is based on
+     Asphyxia-UI by Asphyxia (Rez I.).
+  b. Mark modified versions. A modified version must say clearly that it is
+     modified and unofficial, and must use a name other than "Asphyxia-UI" on
+     its own (for example "MyPack, based on Asphyxia-UI"). It must not suggest
+     it is endorsed by, or comes from, the copyright holder.
+  c. No money. No one may make money from Asphyxia-UI material or any work
+     based on it without prior written permission from the copyright holder.
+     This includes, among other things: selling it; charging for downloads,
+     access, early access, support or installation; paywalls, subscriptions
+     or membership-only content (such as Patreon tiers); donations, tips or
+     sponsorships connected to it; advertising-supported or link-shortener
+     download pages; and bundling it in a paid product or service.
+  d. Same terms. Anything you share that contains Asphyxia-UI material must be
+     shared under this same license, free of charge.
+
+Written permission for commercial use may be requested from the copyright
+holder and is granted only case by case. Permission given to one person does
+not extend to anyone else.
+
+If any condition is broken, the permissions in this license end for that
+person until the copyright holder restores them in writing.
+
+THIRD-PARTY MATERIAL
+This notice does not claim ownership of, relicense, or grant rights to third-party
+code, fonts, textures, artwork, trademarks, or other material. Such material remains
+subject to its own licenses and permissions, which take precedence for that material.
+See the included third-party notices and Media/IMPORTED-MEDIA.txt.
+In particular, this notice does not grant permission to redistribute Baganator or
+Syndicator. Their inclusion requires authorization from their rights holder.
+Original font packs that include their own license file are covered by that file.
+
+LIBSHAREDMEDIA COMBINATION EXCEPTION
+In addition to the permissions above, recipients may reverse engineer Asphyxia-UI
+for debugging their modifications as required by LGPL v2.1 section 6, including
+using an interface-compatible modified LibSharedMedia library. This permission
+applies to project-owned code; the library and other third-party components
+retain their own terms. See THIRD-PARTY-NOTICES.txt and
+Libs/LibSharedMedia-3.0/LICENSE.txt.
+
+DISCLAIMER
+To the extent permitted by applicable law, Asphyxia-UI is provided "AS IS",
+without warranties of any kind, express or implied. The copyright holder is not
+liable for claims, damages, or other liability arising from its use, including
+the use of modified versions made by others.

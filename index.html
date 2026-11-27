@@ -249,6 +249,8 @@ ul.ticks b{color:var(--ink);font-weight:600}
 .style:nth-child(4) .tag{color:#b48cff}
 
 /* Discord community hub */
+.legal-list{margin:0;padding-left:18px;display:grid;gap:8px;color:var(--dim);font-size:15px}
+.legal-list b{color:var(--ink);font-weight:600}
 .dc-live{display:inline-flex;align-items:center;gap:8px;margin:-14px 0 22px;padding:6px 12px;border:1px solid var(--line);background:var(--hull);font:500 12px var(--f-mono);color:var(--dim)}
 .dc-live b{color:var(--ink)}
 .dc-dot{width:8px;height:8px;border-radius:50%;background:#3ba55d;box-shadow:0 0 8px #3ba55d;animation:blink 2s steps(2) infinite}
@@ -293,21 +295,6 @@ ul.ticks b{color:var(--ink);font-weight:600}
 .thanks-list li{font:700 16px var(--f-display);letter-spacing:.04em;padding:7px 14px;border:1px solid var(--line);background:var(--hull)}
 .thanks-list span{background:linear-gradient(90deg,var(--pink),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
 .thanks + footer{margin-top:24px}
-
-/* License & credits */
-.legal-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-bottom:18px}
-.legal-card{border:1px solid var(--line);background:var(--hull);padding:20px 22px;min-width:0}
-.legal-card h3{font:700 20px var(--f-display);margin:0 0 10px}
-.legal-card p{color:var(--dim);margin:0 0 12px}
-.legal-card p b{color:var(--ink)}
-.legal-list{margin:0;padding-left:18px;display:grid;gap:8px;color:var(--dim);font-size:15px}
-.legal-list b{color:var(--ink);font-weight:600}
-.legal-note{font:400 12px var(--f-mono);color:var(--dim);margin:10px 0 0}
-.legal-doc{border:1px solid var(--line);background:var(--hull);margin-top:10px}
-.legal-doc summary{cursor:pointer;padding:14px 18px;font:600 13px var(--f-display);letter-spacing:.12em;text-transform:uppercase;color:var(--ink)}
-.legal-doc summary:hover{color:var(--cyan)}
-.legal-doc pre{margin:0;padding:16px 18px;border-top:1px solid var(--line);max-height:420px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:400 12.5px/1.6 var(--f-mono);color:var(--dim);background:#05040b}
-@media (max-width:900px){.legal-grid{grid-template-columns:minmax(0,1fr)}}
 
 /* Schemes */
 .schemes{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
@@ -439,7 +426,6 @@ footer a{color:var(--dim)}
       <li><a href="#install">Install</a></li>
       <li><a href="#community">Community</a></li>
       <li><a href="#support">Support</a></li>
-      <li><a href="#legal">License</a></li>
     </ul>
     <nav class="nav-social" aria-label="Community and support links"><a id="cfg-nav-paypal" class="paypal" title="PayPal" hidden><i><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7.016 19.198h-4.2a.562.562 0 0 1-.555-.65L5.093.584A.692.692 0 0 1 5.776 0h7.222c3.417 0 5.904 2.488 5.846 5.5-.006.25-.027.5-.066.747A6.794 6.794 0 0 1 12.071 12H8.743a.69.69 0 0 0-.682.583l-.325 2.056-.013.083-.692 4.39-.015.087zM19.79 6.142c-.01.087-.01.175-.023.261a7.76 7.76 0 0 1-7.695 6.598H9.007l-.283 1.795-.013.083-.692 4.39-.134.843-.014.088H6.86l-.497 3.15a.562.562 0 0 0 .555.65h3.612c.34 0 .63-.249.683-.585l.952-6.031a.692.692 0 0 1 .683-.584h2.126a6.793 6.793 0 0 0 6.707-5.752c.306-1.95-.466-3.744-1.89-4.906z"/></svg></i><span>Support the project</span></a><a id="cfg-nav-youtube" class="youtube" title="YouTube" hidden><i><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/><path fill="#fff" d="M9.545 15.568V8.432L15.818 12z"/></svg></i><span>Official channel</span></a><a id="cfg-nav-discord" class="discord" title="Discord" hidden><i><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg></i><span>Join the community</span></a><a id="cfg-nav-patreon" class="patreon" title="Patreon" hidden><i><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M22.957 7.21c-.004-3.064-2.391-5.576-5.191-6.482-3.478-1.125-8.064-.962-11.384.604C2.357 3.231 1.093 7.391 1.046 11.54c-.039 3.411.302 12.396 5.369 12.46 3.765.047 4.326-4.804 6.068-7.141 1.24-1.662 2.836-2.132 4.801-2.618 3.376-.836 5.678-3.501 5.673-7.031Z"/></svg></i><span>Become a patron</span></a><a id="cfg-nav-github" class="github" title="GitHub" hidden><i><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></i><span>Source &amp; releases</span></a></nav>
     <a class="btn js-dl" href="https://github.com/Rez666/asphyxia-ui-site/releases/download/asphyxia-latest/Asphyxia-UI.zip">Download</a>
@@ -684,212 +670,6 @@ footer a{color:var(--dim)}
       <a class="btn js-dl" href="https://github.com/Rez666/asphyxia-ui-site/releases/download/asphyxia-latest/Asphyxia-UI.zip">Download Asphyxia-UI.zip</a>
     </div>
 
-    <section id="legal" class="legal">
-      <div class="eyebrow">// License &amp; credits</div>
-      <h2 class="title">Fair use, fair credit</h2>
-      <div class="legal-grid">
-        <div class="legal-card">
-          <h3>License</h3>
-          <p><b>&copy; 2026 Asphyxia (Rez I.).</b> Free and community-friendly. Full terms below.</p>
-          <ul class="legal-list">
-            <li><b>Free to use, modify and share</b>, original or modified, like ElvUI. Plugins, edits and your own UI packs are welcome.</li>
-            <li><b>Credit and mark it.</b> Keep the license, credit Asphyxia (Rez I.), and give modified versions their own name marked as unofficial.</li>
-            <li><b>No money without permission.</b> No selling, paywalls, subscriptions, donations or ads tied to Asphyxia-UI or work based on it, unless granted in writing.</li>
-            <li><b>Third-party</b> libraries, fonts and media keep their own licenses. Provided "as is", without warranty.</li>
-          </ul>
-        </div>
-        <div class="legal-card">
-          <h3>Credits &amp; thanks</h3>
-          <ul class="legal-list">
-            <li><b>Simpy, Elv22, and Tukz</b> — Thank you for the inspiration and encouragement throughout my addon-development journey.</li>
-            <li><b>Hydra</b> — Thank you for getting me into Lua through the original AsphyxiaUI project and helping spark the journey that led here.</li>
-            <li><b>Safturento</b> — Thank you for your advice and help with the original AsphyxiaUI.</li>
-            <li><b>Jiberish and Eltruism</b> — Thank you for the inspiration your UI work has provided.</li>
-            <li><b>Munglunch</b> — Thank you for the inspiration behind SupervillainUI and its distinctive approach to interface design.</li>
-            <li><b>Library and media authors</b> — Thank you to the authors of the included shared libraries, fonts, textures, and other credited assets. Their individual notices and terms remain applicable.</li>
-          </ul>
-          <p class="legal-note">Inspiration acknowledgments recognize creative influence; they do not imply endorsement or collaboration.</p>
-        </div>
-      </div>
-      <details class="legal-doc">
-        <summary>Full license text</summary>
-        <pre>Asphyxia-UI
-Copyright (c) 2026 Asphyxia (Rez I.).
-
-Asphyxia-UI is free, community-friendly software. This license covers the
-original material owned by the copyright holder (&quot;Asphyxia-UI material&quot;):
-project-owned code, artwork, textures, fonts without their own license, and
-documentation.
-
-PERMISSIONS
-Free of charge, anyone may:
-  1. Download, install, use and back up Asphyxia-UI.
-  2. Modify it, including creating plugins, edits, forks and derived UI packs.
-  3. Share copies of Asphyxia-UI, original or modified, with others.
-
-CONDITIONS
-These permissions apply only while all of the following are met:
-  a. Credit. Keep this LICENSE file and the copyright notice in every copy, and
-     state in the download page or description that the work is based on
-     Asphyxia-UI by Asphyxia (Rez I.).
-  b. Mark modified versions. A modified version must say clearly that it is
-     modified and unofficial, and must use a name other than &quot;Asphyxia-UI&quot; on
-     its own (for example &quot;MyPack, based on Asphyxia-UI&quot;). It must not suggest
-     it is endorsed by, or comes from, the copyright holder.
-  c. No money. No one may make money from Asphyxia-UI material or any work
-     based on it without prior written permission from the copyright holder.
-     This includes, among other things: selling it; charging for downloads,
-     access, early access, support or installation; paywalls, subscriptions
-     or membership-only content (such as Patreon tiers); donations, tips or
-     sponsorships connected to it; advertising-supported or link-shortener
-     download pages; and bundling it in a paid product or service.
-  d. Same terms. Anything you share that contains Asphyxia-UI material must be
-     shared under this same license, free of charge.
-
-Written permission for commercial use may be requested from the copyright
-holder and is granted only case by case. Permission given to one person does
-not extend to anyone else.
-
-If any condition is broken, the permissions in this license end for that
-person until the copyright holder restores them in writing.
-
-THIRD-PARTY MATERIAL
-This notice does not claim ownership of, relicense, or grant rights to third-party
-code, fonts, textures, artwork, trademarks, or other material. Such material remains
-subject to its own licenses and permissions, which take precedence for that material.
-See the included third-party notices and Media/IMPORTED-MEDIA.txt.
-In particular, this notice does not grant permission to redistribute Baganator or
-Syndicator. Their inclusion requires authorization from their rights holder.
-Original font packs that include their own license file are covered by that file.
-
-LIBSHAREDMEDIA COMBINATION EXCEPTION
-In addition to the permissions above, recipients may reverse engineer Asphyxia-UI
-for debugging their modifications as required by LGPL v2.1 section 6, including
-using an interface-compatible modified LibSharedMedia library. This permission
-applies to project-owned code; the library and other third-party components
-retain their own terms. See THIRD-PARTY-NOTICES.txt and
-Libs/LibSharedMedia-3.0/LICENSE.txt.
-
-DISCLAIMER
-To the extent permitted by applicable law, Asphyxia-UI is provided &quot;AS IS&quot;,
-without warranties of any kind, express or implied. The copyright holder is not
-liable for claims, damages, or other liability arising from its use, including
-the use of modified versions made by others.</pre>
-      </details>
-      <details class="legal-doc">
-        <summary>Third-party notices (libraries, fonts, GearScore formula)</summary>
-        <pre>LibSharedMedia-3.0
-Author: Elkano (elkano@gmx.de); inspired by SurfaceLib by Haste/Otravi.
-Bundled revision marker: 176; library minor version: 12000002.
-Source: https://repos.wowace.com/wow/libsharedmedia-3-0/!svn/bc/176/trunk/LibSharedMedia-3.0/LibSharedMedia-3.0.lua
-License: GNU Lesser General Public License version 2.1.
-The library and its use are covered by that license; its complete text is in
-Libs/LibSharedMedia-3.0/LICENSE.txt. Readable source is included in that folder.
-The bundled copy has compatibility changes (bit32 fallback and optional
-C_UIFileAsset.IsKnownFile). These were already present when inspected on
-2026-10-10; the historical edit dates have not been established in this audit.
-This source is not an unmodified upstream distribution.
-To use a modified copy, edit/replace its Lua file with an interface-compatible
-version and restart WoW. Another addon&#x27;s newer library can take precedence
-through LibStub; disable that addon when testing a replacement in isolation.
-No warranty is provided, as specified in the accompanying LGPL license.
-
-LibStub
-The bundled file explicitly places LibStub in the public domain.
-Credits retained in source: Kaelten, Cladhaire, ckknight, Mikk, Ammo,
-Nevcairiel, joshborke.
-
-CallbackHandler-1.0
-Bundled library minor version: 8, upstream revision marker: 26.
-Project: https://www.curseforge.com/wow/addons/callbackhandler
-Published license: BSD, reproduced in Libs/CallbackHandler-1.0/LICENSE.txt.
-The published notice contains placeholders; these are retained verbatim,
-not replaced with invented copyright information. The bundled source also
-has a securecallfunction compatibility fallback. Existing attribution is retained.
-
-The library notices above cover those three shared-media libraries only. They do not grant
-rights to unrelated code or assets. See other included notices and
-Media/IMPORTED-MEDIA.txt. Media registration does not change an asset&#x27;s license.
-
-
-THIRD-PARTY FONT FAMILIES (added 2026-10-18)
-
-Bespoke
-Copyright (c) 2016, Metaflop (http://www.metaflop.com), Simon Egli, Marco Mueller, Alexis Reigel, with Reserved Font Name Bespoke.
-Distributed under the SIL Open Font License 1.1 option of the original dual GPLv3/OFL license.
-The supplied OFL template is preserved verbatim; its placeholders are identified by the original font metadata above.
-Notices: Media/Fonts/Packs/ThirdParty/Bespoke/
-
-Eightgon
-Copyright © 2024 GGBotNet (https://ggbot.net), with Reserved Font Name &quot;Eightgon&quot;.
-SIL Open Font License 1.1. See OFL.txt.
-Notices: Media/Fonts/Packs/ThirdParty/Eightgon/
-
-ControlFreak
-© 2001, Graham Meade. All rights reserved.
-Author-defined freeware terms, reproduced verbatim in LICENSE.txt. Unmodified fonts bundled with the free addon. Do not modify for redistribution or sell these fonts.
-Author license source: https://st.1001fonts.net/license/control-freak/readme.txt
-License checked: 2026-10-18.
-Notices: Media/Fonts/Packs/ThirdParty/ControlFreak/
-
-These fonts retain their own licenses, copyright notices, and original names.
-The project-owned-material restrictions in LICENSE do not relicense these fonts.
-
-
-Gputeks
-Copyright (c) 2008, gluk (gluksza@wp.pl), with Reserved Font Name Gputeks.
-SIL Open Font License 1.1. Original regular/bold font binaries are unchanged.
-Source: https://www.glukfonts.pl/font.php?font=Gputeks
-License and credits: Media/Fonts/Packs/ThirdParty/Gputeks/
-
-Trueno
-Original design: Julieta Ulanovsky (copyright 2011-2015).
-Design modifications and new weights 2015: Jasper / Cannot Into Space Fonts.
-Derived from Montserrat; its original Reserved Font Name notice is preserved.
-SIL Open Font License 1.1. Supplied font binaries are unchanged.
-Source: https://www.fontspace.com/trueno-font-f22345
-License, credits and original FONTLOG: Media/Fonts/Packs/ThirdParty/Trueno/
-
-The fonts remain separately licensed under the OFL, not Asphyxia-UI&#x27;s
-project-owned-material license. No author endorsement is implied.
-
-
-ARMORY GEARSCORE CALCULATION (added 2026-11-18)
-
-The compact Classic/Forever GearScore calculation in Modules/Armory.lua adapts
-the coefficient and slot-weight calculation in TacoTip&#x27;s gearscore.lua.
-TacoTip is based on the original GearScoreLite by Mirrikat45 and others.
-Source: https://github.com/ssdeanx/TacoTip-Gearscore-TBC/blob/1f9222276683b97bfbc0333a55461de97739795a/gearscore.lua
-Formula/client comparison and changes are documented in
-Docs/Armory-Equipment-Metrics.md. No external GearScore addon or library is
-bundled. The adapted portion remains under its MIT license; the project-owned
-material restrictions in LICENSE do not replace these permissions.
-
-MIT License
-
-Copyright (C) kebabstorm (Original TacoTip — https://www.curseforge.com/wow/addons/tacotip-gearscore-talents)
-Copyright (C) 2026 AcidBomb
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the &quot;Software&quot;), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.</pre>
-      </details>
-      <p class="legal-note">The license and notices are also included in every download (LICENSE and THIRD-PARTY-NOTICES.txt).</p>
-    </section>
 
     <div class="thanks" id="thanks">
       <div class="eyebrow">// Special thanks</div>

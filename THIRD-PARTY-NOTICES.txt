@@ -1,0 +1,109 @@
+LibSharedMedia-3.0
+Author: Elkano (elkano@gmx.de); inspired by SurfaceLib by Haste/Otravi.
+Bundled revision marker: 176; library minor version: 12000002.
+Source: https://repos.wowace.com/wow/libsharedmedia-3-0/!svn/bc/176/trunk/LibSharedMedia-3.0/LibSharedMedia-3.0.lua
+License: GNU Lesser General Public License version 2.1.
+The library and its use are covered by that license; its complete text is in
+Libs/LibSharedMedia-3.0/LICENSE.txt. Readable source is included in that folder.
+The bundled copy has compatibility changes (bit32 fallback and optional
+C_UIFileAsset.IsKnownFile). These were already present when inspected on
+2026-10-10; the historical edit dates have not been established in this audit.
+This source is not an unmodified upstream distribution.
+To use a modified copy, edit/replace its Lua file with an interface-compatible
+version and restart WoW. Another addon's newer library can take precedence
+through LibStub; disable that addon when testing a replacement in isolation.
+No warranty is provided, as specified in the accompanying LGPL license.
+
+LibStub
+The bundled file explicitly places LibStub in the public domain.
+Credits retained in source: Kaelten, Cladhaire, ckknight, Mikk, Ammo,
+Nevcairiel, joshborke.
+
+CallbackHandler-1.0
+Bundled library minor version: 8, upstream revision marker: 26.
+Project: https://www.curseforge.com/wow/addons/callbackhandler
+Published license: BSD, reproduced in Libs/CallbackHandler-1.0/LICENSE.txt.
+The published notice contains placeholders; these are retained verbatim,
+not replaced with invented copyright information. The bundled source also
+has a securecallfunction compatibility fallback. Existing attribution is retained.
+
+The library notices above cover those three shared-media libraries only. They do not grant
+rights to unrelated code or assets. See other included notices and
+Media/IMPORTED-MEDIA.txt. Media registration does not change an asset's license.
+
+
+THIRD-PARTY FONT FAMILIES (added 2026-10-18)
+
+Bespoke
+Copyright (c) 2016, Metaflop (http://www.metaflop.com), Simon Egli, Marco Mueller, Alexis Reigel, with Reserved Font Name Bespoke.
+Distributed under the SIL Open Font License 1.1 option of the original dual GPLv3/OFL license.
+The supplied OFL template is preserved verbatim; its placeholders are identified by the original font metadata above.
+Notices: Media/Fonts/Packs/ThirdParty/Bespoke/
+
+Eightgon
+Copyright © 2024 GGBotNet (https://ggbot.net), with Reserved Font Name "Eightgon".
+SIL Open Font License 1.1. See OFL.txt.
+Notices: Media/Fonts/Packs/ThirdParty/Eightgon/
+
+ControlFreak
+© 2001, Graham Meade. All rights reserved.
+Author-defined freeware terms, reproduced verbatim in LICENSE.txt. Unmodified fonts bundled with the free addon. Do not modify for redistribution or sell these fonts.
+Author license source: https://st.1001fonts.net/license/control-freak/readme.txt
+License checked: 2026-10-18.
+Notices: Media/Fonts/Packs/ThirdParty/ControlFreak/
+
+These fonts retain their own licenses, copyright notices, and original names.
+The project-owned-material restrictions in LICENSE do not relicense these fonts.
+
+
+Gputeks
+Copyright (c) 2008, gluk (gluksza@wp.pl), with Reserved Font Name Gputeks.
+SIL Open Font License 1.1. Original regular/bold font binaries are unchanged.
+Source: https://www.glukfonts.pl/font.php?font=Gputeks
+License and credits: Media/Fonts/Packs/ThirdParty/Gputeks/
+
+Trueno
+Original design: Julieta Ulanovsky (copyright 2011-2015).
+Design modifications and new weights 2015: Jasper / Cannot Into Space Fonts.
+Derived from Montserrat; its original Reserved Font Name notice is preserved.
+SIL Open Font License 1.1. Supplied font binaries are unchanged.
+Source: https://www.fontspace.com/trueno-font-f22345
+License, credits and original FONTLOG: Media/Fonts/Packs/ThirdParty/Trueno/
+
+The fonts remain separately licensed under the OFL, not Asphyxia-UI's
+project-owned-material license. No author endorsement is implied.
+
+
+ARMORY GEARSCORE CALCULATION (added 2026-11-18)
+
+The compact Classic/Forever GearScore calculation in Modules/Armory.lua adapts
+the coefficient and slot-weight calculation in TacoTip's gearscore.lua.
+TacoTip is based on the original GearScoreLite by Mirrikat45 and others.
+Source: https://github.com/ssdeanx/TacoTip-Gearscore-TBC/blob/1f9222276683b97bfbc0333a55461de97739795a/gearscore.lua
+Formula/client comparison and changes are documented in
+Docs/Armory-Equipment-Metrics.md. No external GearScore addon or library is
+bundled. The adapted portion remains under its MIT license; the project-owned
+material restrictions in LICENSE do not replace these permissions.
+
+MIT License
+
+Copyright (C) kebabstorm (Original TacoTip — https://www.curseforge.com/wow/addons/tacotip-gearscore-talents)
+Copyright (C) 2026 AcidBomb
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
